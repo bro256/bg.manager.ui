@@ -50,7 +50,7 @@ const App = () => {
 
   return (
     <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-lg bg-primary">
         <Link to={"/"} className="navbar-brand">
           Some Manager
         </Link>
