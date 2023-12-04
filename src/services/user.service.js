@@ -35,6 +35,10 @@ class UserService {
   editPasswordEntry(id, passwordEntryData) {
     return axios.put(API_URL + 'password-entries/' + id, passwordEntryData, { headers: authHeader() });
   }
+
+  deletePasswordEntry(id) {
+    return axios.delete(API_URL + 'password-entries/' + id, { headers: authHeader() });
+  }
   
 }
 

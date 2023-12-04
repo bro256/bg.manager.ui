@@ -33,6 +33,13 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
                 >
                   Edit
                 </button>
+                <button
+                  type="button"
+                  className="btn btn-danger mx-2"
+                  onClick={() => deletePasswordEntry(passwordEntry.id)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           </tbody>

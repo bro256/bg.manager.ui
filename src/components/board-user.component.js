@@ -79,6 +79,16 @@ const BoardUser = () => {
     }
   };
   
+
+
+  const deletePasswordEntry =async (id) => {
+    await UserService.deletePasswordEntry(id);
+    // Reload password entries after update
+    loadPasswordEntries();
+  }
+
+
+
   useEffect(() => {
     // Load password entries on component start
     loadPasswordEntries();
@@ -154,6 +164,7 @@ const BoardUser = () => {
       <PasswordEntryList
           passwordEntries={passwordEntries}
           editPasswordEntry={editPasswordEntry}
+          deletePasswordEntry={deletePasswordEntry}
       />
     </div>
   );
