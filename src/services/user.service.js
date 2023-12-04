@@ -23,6 +23,11 @@ class UserService {
   getUserPasswordEntries() {
     return axios.get(API_URL + 'password-entries', { headers: authHeader() });
   }
+
+  savePasswordEntry(passwordEntryData) {
+    return axios.post(API_URL + 'password-entries', passwordEntryData, { headers: authHeader() });
+  }
+  
 }
 
 export default new UserService();
