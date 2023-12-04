@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import UserService from "../services/user.service";
-import EventBus from "../common/EventBus";
 import PasswordEntryList from "./PasswordEntryList";
 
 const BoardUser = () => {
@@ -21,6 +20,7 @@ const BoardUser = () => {
       website: website,
     };
 
+  
     try {
       await UserService.savePasswordEntry(passwordEntryData);
 
@@ -35,8 +35,56 @@ const BoardUser = () => {
       loadPasswordEntries();
     } catch (error) {
       console.error("Error saving password entry", error);
+      alert("Error saving password entry. Please try again.");
     }
   };
+
+
+
+  const editPasswordEntry = async (passwordEntry) => {
+    setId(passwordEntry.id);
+    setTitle(passwordEntry.title);
+    setUsername(passwordEntry.username);
+    setEncryptedPassword(passwordEntry.encryptedPassword);
+    setWebsite(passwordEntry.website);
+  }
+
+
+
+  const updatePasswordEntry = async () => {
+    try {
+      const editedPasswordEntry = {
+        id: id,
+        title: title,
+        username: username,
+        encryptedPassword: encryptedPassword,
+        website: website,
+      };
+
+      // Send the modified detailsto the server for update
+      await UserService.editPasswordEntry(id, editedPasswordEntry);
+
+      // Reset the state after updating
+      setId("");
+      setTitle("");
+      setUsername("");
+      setEncryptedPassword("");
+      setWebsite("");
+
+      // Reload password entries after update
+      loadPasswordEntries();
+    } catch (error) {
+      console.error("Error updating password entry", error);
+      alert("Error updating password entry. Please try again.");
+    }
+  };
+  
+  useEffect(() => {
+    // Load password entries on component start
+    loadPasswordEntries();
+  }, []);
+
+
 
   const loadPasswordEntries = async () => {
     try {
@@ -44,19 +92,13 @@ const BoardUser = () => {
       setPasswordEntries(result.data);
     } catch (error) {
       console.error("Error loading password entries", error);
+      alert("Error loading password entries. Please try again.");
     }
   };
 
-  // Other functions...
-
-  useEffect(() => {
-    // Load password entries on component mount
-    loadPasswordEntries();
-  }, []);
 
   return (
     <div className="container mt-4">
-
       <form>
         <div className="form-group">
           <label>Title:</label>
@@ -99,12 +141,11 @@ const BoardUser = () => {
         </div>
 
         <div>
-          <button
-            type="button"
-            className="btn btn-primary m-4"
-            onClick={savePasswordEntry}
-          >
+          <button className="btn btn-primary m-4" onClick={savePasswordEntry}>
             Save
+          </button>
+          <button className="btn btn-primary m-4" onClick={updatePasswordEntry}>
+            Update
           </button>
         </div>
       </form>
@@ -112,6 +153,7 @@ const BoardUser = () => {
       {/* Display the list of password entries */}
       <PasswordEntryList
           passwordEntries={passwordEntries}
+          editPasswordEntry={editPasswordEntry}
       />
     </div>
   );

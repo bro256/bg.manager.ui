@@ -26,6 +26,13 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
               <td>{passwordEntry.encryptedPassword}</td>
               <td>{passwordEntry.website}</td>
               <td>
+                <button
+                  type="button"
+                  className="btn btn-warning"
+                  onClick={() => editPasswordEntry(passwordEntry)}
+                >
+                  Edit
+                </button>
               </td>
             </tr>
           </tbody>

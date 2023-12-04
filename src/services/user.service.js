@@ -24,8 +24,16 @@ class UserService {
     return axios.get(API_URL + 'password-entries', { headers: authHeader() });
   }
 
+  getPasswordEntryById(id) {
+    return axios.get(API_URL + 'password-entries/' + id, { headers: authHeader() });
+  }
+
   savePasswordEntry(passwordEntryData) {
     return axios.post(API_URL + 'password-entries', passwordEntryData, { headers: authHeader() });
+  }
+
+  editPasswordEntry(id, passwordEntryData) {
+    return axios.put(API_URL + 'password-entries/' + id, passwordEntryData, { headers: authHeader() });
   }
   
 }
