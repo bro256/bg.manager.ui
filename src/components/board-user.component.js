@@ -38,6 +38,14 @@ export default class BoardUser extends Component {
     this.fetchPasswordEntries();
   }
 
+  handleEditClick(entryId) {
+    console.log("Edit button clicked for ID:", entryId);
+  }
+
+  handleDeleteClick(entryId) {
+    console.log("Delete button clicked for ID:", entryId);
+  }
+
   fetchPasswordEntries() {
     // Fetch password entries from the backend
     UserService.getUserPasswordEntries().then(
@@ -66,6 +74,9 @@ export default class BoardUser extends Component {
                 <strong>Title:</strong> {entry.title}<br />
                 <strong>Username:</strong> {entry.username}<br />
                 <strong>Website:</strong> {entry.website}<br />
+                <button onClick={() => this.handleEditClick(entry.id)}>Edit</button>
+                <button onClick={() => this.handleDeleteClick(entry.id)}>Delete</button>
+
               </li>
             ))}
           </ul>
