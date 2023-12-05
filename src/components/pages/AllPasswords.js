@@ -147,7 +147,7 @@ const AllPasswords = () => {
         </div>
 
         <div className="form-group">
-          <label>Website:</label>
+          <label>Website URL:</label>
           <input
             type="text"
             className="form-control"
