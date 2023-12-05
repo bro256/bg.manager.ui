@@ -9,6 +9,7 @@ const AllPasswords = () => {
   const [username, setUsername] = useState("");
   const [encryptedPassword, setEncryptedPassword] = useState("");
   const [website, setWebsite] = useState("");
+  const [inFavorites, setInFavorites] = useState(false);
 
   const savePasswordEntry = async (event) => {
     event.preventDefault();
@@ -18,6 +19,7 @@ const AllPasswords = () => {
       username: username,
       encryptedPassword: encryptedPassword,
       website: website,
+      inFavorites: inFavorites,
     };
 
   
@@ -30,6 +32,7 @@ const AllPasswords = () => {
       setUsername("");
       setEncryptedPassword("");
       setWebsite("");
+      setInFavorites(false);
 
       // Reload password entries after saving
       loadPasswordEntries();
@@ -47,6 +50,7 @@ const AllPasswords = () => {
     setUsername(passwordEntry.username);
     setEncryptedPassword(passwordEntry.encryptedPassword);
     setWebsite(passwordEntry.website);
+    setInFavorites(passwordEntry.inFavorites);
   }
 
 
@@ -59,6 +63,7 @@ const AllPasswords = () => {
         username: username,
         encryptedPassword: encryptedPassword,
         website: website,
+        inFavorites: inFavorites,
       };
 
       // Send the modified detailsto the server for update
@@ -70,6 +75,7 @@ const AllPasswords = () => {
       setUsername("");
       setEncryptedPassword("");
       setWebsite("");
+      setInFavorites(false);
 
       // Reload password entries after update
       loadPasswordEntries();
@@ -147,6 +153,16 @@ const AllPasswords = () => {
             className="form-control"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>In Favorites:</label>
+          <input
+            type="checkbox"
+            className="form-check-input"
+            checked={inFavorites}
+            onChange={() => setInFavorites(!inFavorites)}
           />
         </div>
 

@@ -27,6 +27,7 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
     <table className="table table-hover mt-3" align="center">
       <thead className="thead-light">
         <tr>
+          <th scope="col"></th>
           <th scope="col">Title</th>
           <th scope="col">Username</th>
           <th scope="col">Password</th>
@@ -40,6 +41,17 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
       {passwordEntries.map((passwordEntry, index) => (
         <tbody key={passwordEntry.id}>
           <tr>
+          <td>
+              {passwordEntry.inFavorites ? (
+                <span role="img" aria-label="star">
+                  ⭐
+                </span>
+              ) : (
+                <span role="img" aria-label="star" style={{ opacity: 0.2 }}>
+                  ⭐
+                </span>
+              )}
+            </td>
             <td>{passwordEntry.title}</td>
             <td>{passwordEntry.username}</td>
             <td style={{ verticalAlign: "middle" }}>
