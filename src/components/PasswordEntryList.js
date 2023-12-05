@@ -19,13 +19,13 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
     }));
   };
 
-  const copyToClipboard = (text) => {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textarea);
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log('Text successfully copied to clipboard');
+    } catch (err) {
+      console.error('Unable to copy text to clipboard', err);
+    }
   };
 
   const openWebsite = (url) => {
@@ -38,7 +38,7 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
 
   return (
     <div>
-      <table className="table table-hover mt-3" align="center">
+      <table className="table table-sm table-hover mt-3" align="center">
       <thead className="thead-light">
         <tr>
           <th scope="col"></th>
@@ -82,7 +82,7 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
               {passwordVisibility[passwordEntry.id] ? (
                 passwordEntry.encryptedPassword
               ) : (
-                <span>****************</span>
+                <span>********************</span>
               )}
             </td>
             <td>
