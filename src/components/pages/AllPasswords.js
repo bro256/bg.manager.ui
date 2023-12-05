@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import UserService from "../services/user.service";
-import PasswordEntryList from "./PasswordEntryList";
+import UserService from "../../services/user.service";
+import PasswordEntryList from "../PasswordEntryList";
 
-const BoardUser = () => {
+const AllPasswords = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
@@ -170,4 +170,4 @@ const BoardUser = () => {
   );
 };
 
-export default BoardUser;
+export default AllPasswords;
