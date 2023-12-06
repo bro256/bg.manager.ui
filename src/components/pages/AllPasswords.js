@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import UserService from "../../services/user.service";
 import PasswordEntryList from "../PasswordEntryList";
+import CryptoJS from "crypto-js";
 
 const AllPasswords = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [username, setUsername] = useState("");
-  const [encryptedPassword, setEncryptedPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [website, setWebsite] = useState("");
   const [inFavorites, setInFavorites] = useState(false);
 
@@ -31,11 +32,90 @@ const AllPasswords = () => {
   };
 
 
+  
+
+  const encryptPassword = (password, derivedKey) => {
+    try {
+      console.log("Encrypting password...");
+  
+      // Convert the derived key from hexadecimal to WordArray
+      const key = CryptoJS.enc.Hex.parse(derivedKey);
+  
+      // Generate a random IV
+      const iv = CryptoJS.lib.WordArray.random(16); // Increase IV length for GCM
+  
+      // Encrypt the password using AES-CBC
+      const encrypted = CryptoJS.AES.encrypt(password, key, {
+        iv: iv,
+      });
+  
+      // Extract the ciphertext and IV
+      const encryptedPassword = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+      const encryptionIv = iv.toString(CryptoJS.enc.Base64);
+  
+      console.log("Encrypted Password:", encryptedPassword);
+      console.log("Encryption IV:", encryptionIv);
+  
+      return {
+        encryptedPassword,
+        encryptionIv,
+      };
+    } catch (error) {
+      console.error("Error during encryption:", error);
+      throw error;
+    }
+  };
+  
+
+
+  const decryptPassword = (encryptedPassword, encryptionIv, derivedKey) => {
+    try {
+      console.log("Decrypting password...");
+  
+      // Convert the derived key from hexadecimal to WordArray
+      const key = CryptoJS.enc.Hex.parse(derivedKey);
+  
+      // Convert IV from Base64 to WordArray
+      const iv = CryptoJS.enc.Base64.parse(encryptionIv);
+  
+      // Decrypt the password using AES-CBC
+      const decrypted = CryptoJS.AES.decrypt(
+        {
+          ciphertext: CryptoJS.enc.Base64.parse(encryptedPassword),
+          iv: iv,
+          salt: null, // Not needed for GCM
+          key: key,
+          algorithm: "AES-CBC",
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7,
+          blockSize: 4,
+          formatter: CryptoJS.format.OpenSSL,
+        },
+        key,
+        {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7,
+        }
+      );
+  
+      // Convert the decrypted WordArray to a UTF-8 string
+      const decryptedPassword = decrypted.toString(CryptoJS.enc.Utf8);
+      console.log("Decrypted Password:", decryptedPassword);
+      return decryptedPassword;
+    } catch (error) {
+      console.error("Error during decryption:", error);
+      throw error;
+    }
+  };
+  
+
+  
   const clearForm = () => {
     setId("");
     setTitle("");
     setUsername("");
-    setEncryptedPassword("");
+    setPassword("");
     setWebsite("");
     setInFavorites(false);
   }
@@ -45,10 +125,19 @@ const AllPasswords = () => {
   const savePasswordEntry = async (event) => {
     event.preventDefault();
 
+    // Get the derived key from sessionStorage
+    const derivedKey = sessionStorage.getItem('derivedKey');
+    console.log(derivedKey)
+
+    // Encrypt the password using the derived key
+    const { encryptedPassword, encryptionIv, authTag } = encryptPassword(password, derivedKey);
+
     const passwordEntryData = {
       title: title,
       username: username,
       encryptedPassword: encryptedPassword,
+      encryptionIv: encryptionIv,
+      authTag: authTag,
       website: website,
       inFavorites: inFavorites,
     };
@@ -61,7 +150,7 @@ const AllPasswords = () => {
       setId("");
       setTitle("");
       setUsername("");
-      setEncryptedPassword("");
+      setPassword("");
       setWebsite("");
       setInFavorites(false);
 
@@ -78,7 +167,7 @@ const AllPasswords = () => {
     setId(passwordEntry.id);
     setTitle(passwordEntry.title);
     setUsername(passwordEntry.username);
-    setEncryptedPassword(passwordEntry.encryptedPassword);
+    setPassword(passwordEntry.password);
     setWebsite(passwordEntry.website);
     setInFavorites(passwordEntry.inFavorites);
   }
@@ -90,7 +179,7 @@ const AllPasswords = () => {
         id: id,
         title: title,
         username: username,
-        encryptedPassword: encryptedPassword,
+        password: password,
         website: website,
         inFavorites: inFavorites,
       };
@@ -102,7 +191,7 @@ const AllPasswords = () => {
       setId("");
       setTitle("");
       setUsername("");
-      setEncryptedPassword("");
+      setPassword("");
       setWebsite("");
       setInFavorites(false);
 
@@ -134,7 +223,16 @@ const AllPasswords = () => {
   const loadPasswordEntries = async () => {
     try {
       const result = await UserService.getUserPasswordEntries();
-      setPasswordEntries(result.data);
+  
+      // Decrypt the passwords before setting the state
+      const decryptedEntries = result.data.map(entry => {
+        return {
+          ...entry,
+          password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
+        };
+      });
+  
+      setPasswordEntries(decryptedEntries);
     } catch (error) {
       console.error("Error loading password entries", error);
       alert("Error loading password entries. Please try again.");
@@ -144,7 +242,7 @@ const AllPasswords = () => {
 
   return (
     <div className="container mt-4">
-      <div class="row">
+      <div className="row">
 
         <div className="col-md-6">
           {/* Display the list of password entries */}
@@ -158,7 +256,7 @@ const AllPasswords = () => {
         <div className="col-md-6 ">
           <h2>Password entry information</h2>
 
-          <form  class="row gy-2 gx-3 align-items-center">
+          <form  className="row gy-2 gx-3 align-items-center">
 
             <div className="mb-2">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Title:</label>
@@ -175,7 +273,7 @@ const AllPasswords = () => {
                 onChange={(e) => setWebsite(e.target.value)}
               />
             </div>
-            <div class="mb-2">
+            <div className="mb-2">
             <button
                 type="button"
                 className="btn btn-primary btn-sm"
@@ -203,7 +301,7 @@ const AllPasswords = () => {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <div class="mb-2">
+            <div className="mb-2">
             <button
                 type="button"
                 className="btn btn-secondary btn-sm"
@@ -219,19 +317,19 @@ const AllPasswords = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 className="form-control form-control-sm"
-                value={encryptedPassword}
-                onChange={(e) => setEncryptedPassword(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            <div class="mb-2">
+            <div className="mb-2">
               <button type="button" className="btn btn-secondary btn-sm" onClick={togglePasswordVisibility}>
                 {showPassword ? "Hide" : "Show"}
               </button>
               <button
                   type="button"
                   className="btn btn-secondary btn-sm mx-2"
-                  onClick={() => copyToClipboard(encryptedPassword)}
+                  onClick={() => copyToClipboard(password)}
                 >
                   Copy
                 </button>
