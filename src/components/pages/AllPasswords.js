@@ -130,14 +130,13 @@ const AllPasswords = () => {
     console.log(derivedKey)
 
     // Encrypt the password using the derived key
-    const { encryptedPassword, encryptionIv, authTag } = encryptPassword(password, derivedKey);
+    const { encryptedPassword, encryptionIv} = encryptPassword(password, derivedKey);
 
     const passwordEntryData = {
       title: title,
       username: username,
       encryptedPassword: encryptedPassword,
       encryptionIv: encryptionIv,
-      authTag: authTag,
       website: website,
       inFavorites: inFavorites,
     };
@@ -174,19 +173,27 @@ const AllPasswords = () => {
 
 
   const updatePasswordEntry = async () => {
+    // Get the derived key from sessionStorage
+    const derivedKey = sessionStorage.getItem('derivedKey');
+  
     try {
+      // Encrypt the password using the derived key
+      const { encryptedPassword, encryptionIv } = encryptPassword(password, derivedKey);
+  
       const editedPasswordEntry = {
         id: id,
         title: title,
         username: username,
-        password: password,
+        encryptedPassword: encryptedPassword,
+        encryptionIv: encryptionIv,
         website: website,
         inFavorites: inFavorites,
       };
-
-      // Send the modified detailsto the server for update
-      await UserService.editPasswordEntry(id, editedPasswordEntry);
-
+  
+      // Send the modified details to the server for update
+      const response = await UserService.editPasswordEntry(id, editedPasswordEntry);
+      console.log('Edit response:', response);
+  
       // Reset the state after updating
       setId("");
       setTitle("");
@@ -194,7 +201,7 @@ const AllPasswords = () => {
       setPassword("");
       setWebsite("");
       setInFavorites(false);
-
+  
       // Reload password entries after update
       loadPasswordEntries();
     } catch (error) {
@@ -202,6 +209,10 @@ const AllPasswords = () => {
       alert("Error updating password entry. Please try again.");
     }
   };
+  
+  
+  
+  
   
 
 
@@ -223,7 +234,7 @@ const AllPasswords = () => {
   const loadPasswordEntries = async () => {
     try {
       const result = await UserService.getUserPasswordEntries();
-  
+
       // Decrypt the passwords before setting the state
       const decryptedEntries = result.data.map(entry => {
         return {
@@ -231,7 +242,7 @@ const AllPasswords = () => {
           password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
         };
       });
-  
+
       setPasswordEntries(decryptedEntries);
     } catch (error) {
       console.error("Error loading password entries", error);
