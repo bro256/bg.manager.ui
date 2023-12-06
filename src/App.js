@@ -42,6 +42,9 @@ const App = () => {
   }, []);
 
   const logOut = () => {
+    // Remove the derived key from session storage
+    sessionStorage.removeItem('derivedKey');
+   
     AuthService.logout();
     setShowModeratorBoard(false);
     setShowAdminBoard(false);

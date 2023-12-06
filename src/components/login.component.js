@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import CryptoJS from "crypto-js"; // Import CryptoJS
 
 import AuthService from "../services/auth.service";
 
@@ -42,6 +43,19 @@ const Login = (props) => {
     });
   };
 
+  const generateSalt = (username) => {
+    // Hash the username with SHA-256
+    const hash = CryptoJS.SHA256(username).toString(CryptoJS.enc.Hex);
+    // Take the first 16 characters (128 bits) of the hash as the salt
+    return hash.slice(0, 16);
+  };
+
+  const deriveKey = (password, salt) => {
+    // Derive the key using CryptoJS for PBKDF2
+    const key = CryptoJS.PBKDF2(password, salt, { keySize: 256 / 32, iterations: 100000 });
+    return key.toString(CryptoJS.enc.Hex);
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
 
@@ -54,6 +68,12 @@ const Login = (props) => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
+      // Generate the salt by hashing the username with SHA-256 and taking 128 bits
+      const salt = generateSalt(state.username);
+      const derivedKey = deriveKey(state.password, salt);
+      // Save the derived key securely in the user's browser session storage
+      sessionStorage.setItem('derivedKey', derivedKey);
+
       AuthService.login(state.username, state.password).then(
         () => {
           props.router.navigate("/profile");
@@ -81,6 +101,7 @@ const Login = (props) => {
       });
     }
   };
+
 
   return (
     <div className="col-md-12">
