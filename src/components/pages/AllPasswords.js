@@ -26,6 +26,22 @@ const AllPasswords = () => {
     }
   };
 
+  const openWebsite = (url) => {
+    window.open(url, '_blank');
+  };
+
+
+  const clearForm = () => {
+    setId("");
+    setTitle("");
+    setUsername("");
+    setEncryptedPassword("");
+    setWebsite("");
+    setInFavorites(false);
+  }
+
+
+
   const savePasswordEntry = async (event) => {
     event.preventDefault();
 
@@ -128,159 +144,141 @@ const AllPasswords = () => {
 
   return (
     <div className="container mt-4">
-      <form  class="row gy-2 gx-3 align-items-center">
-
-        {/* <div className="form-group">
-          <label>Title:</label>
-          <input
-            type="text"
-            className="form-control"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Website URL:</label>
-          <input
-            type="text"
-            className="form-control"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Username:</label>
-          <input
-            type="text"
-            className="form-control"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Password:</label>
-          <input
-            type="password"
-            className="form-control"
-            value={encryptedPassword}
-            onChange={(e) => setEncryptedPassword(e.target.value)}
-          />
-        </div> */}
-
-        {/* <div className="col-sm-3">
-          <label className="visually-hidden">Title:</label>
-          <input type="text" className="form-control" placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-
-        <div className="col-sm-3">
-          <label className="visually-hidden">Website URL:</label>
-          <input type="text" className="form-control" placeholder="Website URL"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-          />
-        </div>
-
-        <div className="col-sm-3">
-          <label className="visually-hidden">Username:</label>
-          <input type="text" className="form-control" placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-
-        <div className="col-sm-3">
-        <label className="visually-hidden">Password:</label>
-          <input type="password" className="form-control" placeholder="Password"
-            value={encryptedPassword}
-            onChange={(e) => setEncryptedPassword(e.target.value)}
-          />
-        </div> */}
+      <div class="row">
 
         <div className="col-md-6">
-
-          <div className="mb-3">
-            <label className="visually-hidden">Title:</label>
-            <input type="text" className="form-control" placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="visually-hidden">Website URL:</label>
-            <input type="text" className="form-control" placeholder="Website URL"
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="visually-hidden">Username:</label>
-            <input type="text" className="form-control" placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-
-          <div className="mb-3">
-            <label className="visually-hidden">Password:</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-control"
-              placeholder="Password"
-              value={encryptedPassword}
-              onChange={(e) => setEncryptedPassword(e.target.value)}
-            />
-          </div>
-
-          <div class="mb-3">
-            <button type="button" className="btn btn-secondary m-1" onClick={togglePasswordVisibility}>
-              {showPassword ? "Hide" : "Show"}
-            </button>
-            <button
-                type="button"
-                className="btn btn-secondary m-1"
-                onClick={() => copyToClipboard(encryptedPassword)}
-              >
-                copy
-              </button>
-         </div>
-
-        </div>
-
-
-        <div className="mb-1 form-check form-switch">
-        <label> In Favorites</label>
-          <input
-            type="checkbox"
-            className="form-check-input form-check form-switch md-2"
-            checked={inFavorites}
-            onChange={() => setInFavorites(!inFavorites)}
+          {/* Display the list of password entries */}
+          <PasswordEntryList
+              passwordEntries={passwordEntries}
+              editPasswordEntry={editPasswordEntry}
+              deletePasswordEntry={deletePasswordEntry}
           />
         </div>
 
-        <div>
-          <button className="btn btn-primary m-1" onClick={savePasswordEntry}>
-            Save
-          </button>
-          <button className="btn btn-primary m-1" onClick={updatePasswordEntry}>
-            Update
-          </button>
-        </div>
-      </form>
+        <div className="col-md-6 ">
+          <h2>Password entry information</h2>
 
-      {/* Display the list of password entries */}
-      <PasswordEntryList
-          passwordEntries={passwordEntries}
-          editPasswordEntry={editPasswordEntry}
-          deletePasswordEntry={deletePasswordEntry}
-      />
+          <form  class="row gy-2 gx-3 align-items-center">
+
+            <div className="mb-2">
+              <label className="ol-sm-2 col-form-label col-form-label-sm">Title:</label>
+              <input type="text" className="form-control form-control-sm"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+
+            <div className="mb-0">
+              <label className="ol-sm-2 col-form-label col-form-label-sm">Website URL:</label>
+              <input type="text" className="form-control form-control-sm"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+            </div>
+            <div class="mb-2">
+            <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={() => openWebsite(website)}
+              >
+                Visit
+              </button>
+           
+
+            
+
+            <button
+                type="button"
+                className="btn btn-secondary btn-sm mx-2"
+                onClick={() => copyToClipboard(website)}
+              >
+                Copy
+              </button>
+            </div>
+
+            <div className="mb-0">
+              <label className="ol-sm-2 col-form-label col-form-label-sm">Username:</label>
+              <input type="text" className="form-control form-control-sm"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+            <div class="mb-2">
+            <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => copyToClipboard(website)}
+              >
+                Copy
+              </button>
+            </div>
+            
+
+            <div className="mb-0">
+              <label className="ol-sm-2 col-form-label col-form-label-sm">Password:</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control form-control-sm"
+                value={encryptedPassword}
+                onChange={(e) => setEncryptedPassword(e.target.value)}
+              />
+            </div>
+
+            <div class="mb-2">
+              <button type="button" className="btn btn-secondary btn-sm" onClick={togglePasswordVisibility}>
+                {showPassword ? "Hide" : "Show"}
+              </button>
+              <button
+                  type="button"
+                  className="btn btn-secondary btn-sm mx-2"
+                  onClick={() => copyToClipboard(encryptedPassword)}
+                >
+                  Copy
+                </button>
+            </div>
+
+          
+
+
+            <div className="mb-1 form-check form-switch">
+            <label className="ol-sm-2 col-form-label col-form-label-sm"> In Favorites</label>
+            
+              <input
+                type="checkbox"
+                className="form-check-input form-check form-switch md-2"
+                checked={inFavorites}
+                onChange={() => setInFavorites(!inFavorites)}
+              />
+            </div>
+
+            <div>
+              <button className="btn btn-primary btn-sm" onClick={savePasswordEntry}>
+                Save
+              </button>
+              <button className="btn btn-primary btn-sm mx-2" onClick={updatePasswordEntry}>
+                Update
+              </button>
+
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={clearForm}
+              >
+                Clear
+              </button>
+
+              <button
+                className="btn btn-danger btn-sm mx-2"
+                onClick={() => deletePasswordEntry(id)}
+              >
+                Delete
+              </button>
+            </div>
+            
+          </form>
+        </div>
+
+
+      </div>
     </div>
   );
 };

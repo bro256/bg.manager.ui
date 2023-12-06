@@ -5,7 +5,7 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
   const [passwordVisibility, setPasswordVisibility] = useState({});
 
   // Pagination
-  const entriesPerPage = 8; // Items per page. Adjust as needed
+  const entriesPerPage = 30; // Items per page. Adjust as needed
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
   const currentEntries = passwordEntries.slice(indexOfFirstEntry, indexOfLastEntry);
@@ -28,48 +28,47 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
     }
   };
 
-  const openWebsite = (url) => {
-    window.open(url, '_blank');
-  };
+
 
   if (!passwordEntries || passwordEntries.length === 0) {
     return <p>No password entries found.</p>;
   }
 
   return (
-    <div>
+    <div className="col-md-10">
+      <h2>Password entries</h2>
       <table className="table table-sm table-hover mt-3" align="center">
       <thead className="thead-light">
         <tr>
           <th scope="col"></th>
           <th scope="col">Title</th>
-          <th scope="col">Website URL</th>
+          {/* <th scope="col">Website URL</th> */}
           <th scope="col">Username</th>
-          <th scope="col"></th>
+          {/* <th scope="col"></th>
           <th scope="col">Password</th>
           <th scope="col"></th>
           <th scope="col">Modified</th>
-          <th scope="col">Actions</th>
+          <th scope="col">Actions</th> */}
         </tr>
       </thead>
       {currentEntries.map((passwordEntry, index) => (
-        <tbody key={passwordEntry.id}>
-          <tr>
-          <td>
-              {passwordEntry.inFavorites ? (
-                <span role="img" aria-label="star">
-                  ⭐
-                </span>
-              ) : (
-                <span role="img" aria-label="star" style={{ opacity: 0.2 }}>
-                  ⭐
-                </span>
-              )}
-            </td>
+  <tbody key={passwordEntry.id} onClick={() => editPasswordEntry(passwordEntry)} style={{ cursor: 'pointer' }}>
+    <tr>
+      <td>
+        {passwordEntry.inFavorites ? (
+          <span role="img" aria-label="star">
+            ⭐
+          </span>
+        ) : (
+          <span role="img" aria-label="star" style={{ opacity: 0.2 }}>
+            ⭐
+          </span>
+        )}
+      </td>
             <td>{passwordEntry.title}</td>
-            <td>{passwordEntry.website}</td>
+            {/* <td>{passwordEntry.website}</td> */}
             <td>{passwordEntry.username}</td>
-            <td>
+            {/* <td>
               <button
                 type="button"
                 className="btn btn-secondary btn-sm mx-2"
@@ -126,7 +125,7 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
                 Delete
               </button>
 
-            </td>
+            </td> */}
           </tr>
         </tbody>
       ))}
