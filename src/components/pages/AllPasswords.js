@@ -3,6 +3,8 @@ import UserService from "../../services/user.service";
 import PasswordEntryList from "../PasswordEntryList";
 import CryptoJS from "crypto-js";
 
+
+
 const AllPasswords = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
   const [id, setId] = useState("");
@@ -11,12 +13,16 @@ const AllPasswords = () => {
   const [password, setPassword] = useState("");
   const [website, setWebsite] = useState("");
   const [inFavorites, setInFavorites] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
+
+
+
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+
+
 
   const copyToClipboard = async (text) => {
     try {
@@ -27,12 +33,13 @@ const AllPasswords = () => {
     }
   };
 
+
+
   const openWebsite = (url) => {
     window.open(url, '_blank');
   };
-
-
   
+
 
   const encryptPassword = (password, derivedKey) => {
     try {
@@ -108,7 +115,7 @@ const AllPasswords = () => {
       throw error;
     }
   };
-  
+
 
   
   const clearForm = () => {
@@ -118,20 +125,22 @@ const AllPasswords = () => {
     setPassword("");
     setWebsite("");
     setInFavorites(false);
+    setShowPassword(false);
   }
 
 
 
   const savePasswordEntry = async (event) => {
     event.preventDefault();
-
+  
     // Get the derived key from sessionStorage
     const derivedKey = sessionStorage.getItem('derivedKey');
-    console.log(derivedKey)
-
+  
     // Encrypt the password using the derived key
-    const { encryptedPassword, encryptionIv} = encryptPassword(password, derivedKey);
-
+    const { encryptedPassword, encryptionIv } = await encryptPassword(password, derivedKey);
+  
+    console.log("Encrypted values before saving:", encryptedPassword, encryptionIv);
+  
     const passwordEntryData = {
       title: title,
       username: username,
@@ -140,11 +149,10 @@ const AllPasswords = () => {
       website: website,
       inFavorites: inFavorites,
     };
-
   
     try {
       await UserService.savePasswordEntry(passwordEntryData);
-
+  
       // Reset the state after saving
       setId("");
       setTitle("");
@@ -152,7 +160,7 @@ const AllPasswords = () => {
       setPassword("");
       setWebsite("");
       setInFavorites(false);
-
+  
       // Reload password entries after saving
       loadPasswordEntries();
     } catch (error) {
@@ -160,6 +168,7 @@ const AllPasswords = () => {
       alert("Error saving password entry. Please try again.");
     }
   };
+  
 
 
   const editPasswordEntry = async (passwordEntry) => {
@@ -211,10 +220,6 @@ const AllPasswords = () => {
   };
   
   
-  
-  
-  
-
 
   const deletePasswordEntry =async (id) => {
     await UserService.deletePasswordEntry(id);
@@ -234,21 +239,33 @@ const AllPasswords = () => {
   const loadPasswordEntries = async () => {
     try {
       const result = await UserService.getUserPasswordEntries();
-
-      // Decrypt the passwords before setting the state
-      const decryptedEntries = result.data.map(entry => {
-        return {
-          ...entry,
-          password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
-        };
-      });
-
-      setPasswordEntries(decryptedEntries);
+  
+      // Check if there are entries
+      if (result.data && result.data.length > 0) {
+        // Decrypt the passwords before setting the state
+        const decryptedEntries = result.data.map(entry => {
+          try {
+            return {
+              ...entry,
+              password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
+            };
+          } catch (error) {
+            console.error('Error decrypting entry:', entry, 'Error:', error);
+            return entry; // Return the original entry to avoid breaking the map function
+          }
+        });
+  
+        setPasswordEntries(decryptedEntries);
+      } else {
+        // No entries, set passwordEntries to an empty array
+        setPasswordEntries([]);
+      }
     } catch (error) {
       console.error("Error loading password entries", error);
       alert("Error loading password entries. Please try again.");
     }
   };
+  
 
 
   return (
@@ -316,7 +333,7 @@ const AllPasswords = () => {
             <button
                 type="button"
                 className="btn btn-secondary btn-sm"
-                onClick={() => copyToClipboard(website)}
+                onClick={() => copyToClipboard(username)}
               >
                 Copy
               </button>
@@ -345,7 +362,6 @@ const AllPasswords = () => {
                   Copy
                 </button>
             </div>
-
           
 
 
@@ -385,7 +401,6 @@ const AllPasswords = () => {
             
           </form>
         </div>
-
 
       </div>
     </div>

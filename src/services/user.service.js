@@ -29,6 +29,7 @@ class UserService {
   }
 
   savePasswordEntry(passwordEntryData) {
+    console.log("Password entries data: " + passwordEntryData);
     return axios.post(API_URL + 'password-entries', passwordEntryData, { headers: authHeader() });
   }
 
