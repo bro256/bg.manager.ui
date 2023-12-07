@@ -67,7 +67,7 @@ const App = () => {
           {showModeratorBoard && (
             <li className="nav-item">
               <Link to={"/mod"} className="nav-link">
-                Moderator Board
+                Moderator
               </Link>
             </li>
           )}
@@ -75,15 +75,15 @@ const App = () => {
           {showAdminBoard && (
             <li className="nav-item">
               <Link to={"/admin"} className="nav-link">
-                Admin Board
+                Admin
               </Link>
             </li>
           )}
 
           {currentUser && (
             <li className="nav-item">
-              <Link to={"/user"} className="nav-link">
-                All passwords
+              <Link to={"/passwords"} className="nav-link">
+                Paasswords
               </Link>
             </li>
           )}
@@ -126,7 +126,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/user" element={<AllPasswords />} />
+          <Route path="/passwords" element={<AllPasswords />} />
           <Route path="/mod" element={<BoardModerator />} />
           <Route path="/admin" element={<BoardAdmin />} />
         </Routes>

@@ -34,24 +34,24 @@ const Profile = () => {
               <strong>{currentUser.username}</strong> Profile
             </h3>
           </header>
+
           <p>
-            <strong>Token:</strong>{" "}
-            {currentUser.accessToken.substring(0, 20)} ...{" "}
-            {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
-          </p>
-          <p>
-            <strong>Id:</strong> {currentUser.id}
+            <strong>User Id:</strong> {currentUser.id}
           </p>
           <p>
             <strong>Email:</strong> {currentUser.email}
           </p>
-          <strong>Authorities:</strong>
+          <strong>User roles:</strong>
           <ul>
             {currentUser.roles &&
               currentUser.roles.map((role, index) => (
                 <li key={index}>{role}</li>
               ))}
           </ul>
+          <p>
+            <strong>Token:</strong>{" "}
+            {currentUser.accessToken.substr(currentUser.accessToken)}
+          </p>
         </div>
       ) : null}
     </div>
