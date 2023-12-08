@@ -15,8 +15,9 @@ const AllPasswords = () => {
   const [inFavorites, setInFavorites] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("None");
+  const [inTrash, setInTrash] = useState(false);
 
-  
+
   useEffect(() => {
     updatePasswordStrength(password);
   }, [password]);
@@ -129,6 +130,7 @@ const AllPasswords = () => {
       encryptionIv: encryptionIv,
       website: website,
       inFavorites: inFavorites,
+      inTrash: inTrash,
     };
   
     try {
@@ -169,10 +171,11 @@ const AllPasswords = () => {
         encryptionIv: encryptionIv,
         website: website,
         inFavorites: inFavorites,
+        inTrash: inTrash,
       };
   
       // Send the modified details to the server for update
-      const response = await UserService.editPasswordEntry(id, editedPasswordEntry);
+      const response = await UserService.updatePasswordEntry(id, editedPasswordEntry);
       console.log('Edit response:', response);
       resetFormState();
       loadPasswordEntries();
@@ -182,7 +185,21 @@ const AllPasswords = () => {
     }
   };
   
+
+  const moveToTrash = async (id) => {
+    try {
+      // Update the inTrash status on the server
+      await UserService.updatePasswordEntry(id, { inTrash: true });
   
+      // Refresh the list of password entries
+      loadPasswordEntries();
+    } catch (error) {
+      console.error('Error moving to trash:', error);
+      alert('Error moving to trash. Please try again.');
+    }
+  };
+
+
   const deletePasswordEntry =async (id) => {
     await UserService.deletePasswordEntry(id);
     resetFormState();
@@ -202,7 +219,9 @@ const AllPasswords = () => {
       // Check if there are entries
       if (result.data && result.data.length > 0) {
         // Decrypt the passwords before setting the state
-        const decryptedEntries = result.data.map(entry => {
+        const decryptedEntries = result.data
+          .filter(entry => !entry.inTrash)
+          .map(entry => {
       
           try {
             return {
@@ -227,7 +246,6 @@ const AllPasswords = () => {
   };
   
   
-
   return (
     <div className="container mt-4">
       <div className="row">
@@ -299,7 +317,8 @@ const AllPasswords = () => {
               <button className="btn btn-primary btn-sm" onClick={savePasswordEntry}>Add</button>
               <button className="btn btn-primary btn-sm mx-2" onClick={updatePasswordEntry}>Update</button>
               <button className="btn btn-primary btn-sm" onClick={resetFormState}>Clear</button>
-              <button className="btn btn-danger btn-sm mx-2" onClick={() => deletePasswordEntry(id)}>Delete</button>
+              <button className="btn btn-danger btn-sm mx-2" onClick={() => moveToTrash(id)}>To Trash</button>
+              <button className="btn btn-danger btn-sm" onClick={() => deletePasswordEntry(id)}>Delete</button>
             </div>
           </form>
         </div>

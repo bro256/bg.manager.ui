@@ -33,7 +33,7 @@ class UserService {
     return axios.post(API_URL + 'password-entries', passwordEntryData, { headers: authHeader() });
   }
 
-  editPasswordEntry(id, passwordEntryData) {
+  updatePasswordEntry(id, passwordEntryData) {
     return axios.put(API_URL + 'password-entries/' + id, passwordEntryData, { headers: authHeader() });
   }
 
