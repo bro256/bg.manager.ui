@@ -16,6 +16,7 @@ const AllPasswords = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("None");
 
+  
   useEffect(() => {
     updatePasswordStrength(password);
   }, [password]);
@@ -26,6 +27,7 @@ const AllPasswords = () => {
     setPasswordStrength(strength);  
   };
 
+  
   const calculatePasswordStrength = (password) => {
     let score = 0;
     const patterns = {
@@ -64,6 +66,19 @@ const AllPasswords = () => {
       return "Very Strong";
     }
   };
+
+
+  const generateRandomPassword = (length = 12) => {
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
+    let password = "";
+    
+    for (let i = 0; i < length; i++){
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
+    }
+
+    return password;
+  }
   
 
 
@@ -229,12 +244,14 @@ const AllPasswords = () => {
         <div className="col-md-6 ">
           <h2>Password entry information</h2>
 
+          {/* Title */}
           <form  className="row gy-2 gx-3 align-items-center">
             <div className="mb-2">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Title:</label>
               <input type="text" className="form-control form-control-sm" value={title} onChange={(e) => setTitle(e.target.value)}/>
             </div>
 
+            {/* Website */}
             <div className="mb-0">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Website URL:</label>
               <input type="text" className="form-control form-control-sm" value={website} onChange={(e) => setWebsite(e.target.value)}/>
@@ -244,6 +261,7 @@ const AllPasswords = () => {
               <button type="button" className="btn btn-secondary btn-sm mx-2" onClick={() => copyToClipboard(website)}>Copy</button>
             </div>
 
+            {/* Username */}
             <div className="mb-0">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Username:</label>
               <input type="text" className="form-control form-control-sm" value={username} onChange={(e) => setUsername(e.target.value)}/>
@@ -252,6 +270,7 @@ const AllPasswords = () => {
               <button type="button" className="btn btn-secondary btn-sm" onClick={() => copyToClipboard(username)}>Copy</button>
             </div>
             
+            {/* Password */}
             <div className="mb-0">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Password:</label>
               <input type={showPassword ? "text" : "password"} className="form-control form-control-sm" value={password}  onChange={(e) => {
@@ -264,15 +283,18 @@ const AllPasswords = () => {
               <div>Password Strength: {passwordStrength}</div>
             </div>
             <div className="mb-2">
+              <button type="button" className="btn btn-secondary btn-sm" onClick={() => copyToClipboard(password)}>Copy</button>
+              <button type="button" className="btn btn-secondary btn-sm mx-2" onClick={() => setPassword(generateRandomPassword())}>Generate</button>
               <button type="button" className="btn btn-secondary btn-sm" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Show"}</button>
-              <button type="button" className="btn btn-secondary btn-sm mx-2" onClick={() => copyToClipboard(password)}>Copy</button>
             </div>
 
+            {/* Favorites */}
             <div className="mb-1 form-check form-switch">
               <label className="ol-sm-2 col-form-label col-form-label-sm"> In Favorites</label>
               <input type="checkbox" className="form-check-input form-check form-switch md-2" checked={inFavorites} onChange={() => setInFavorites(!inFavorites)}/>
             </div>
 
+            {/* Main buttons */}
             <div>
               <button className="btn btn-primary btn-sm" onClick={savePasswordEntry}>Add</button>
               <button className="btn btn-primary btn-sm mx-2" onClick={updatePasswordEntry}>Update</button>
