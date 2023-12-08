@@ -14,6 +14,57 @@ const AllPasswords = () => {
   const [website, setWebsite] = useState("");
   const [inFavorites, setInFavorites] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("None");
+
+  useEffect(() => {
+    updatePasswordStrength(password);
+  }, [password]);
+
+
+  const updatePasswordStrength = (password) => {
+    const strength = calculatePasswordStrength(password);
+    setPasswordStrength(strength);  
+  };
+
+  const calculatePasswordStrength = (password) => {
+    let score = 0;
+    const patterns = {
+      length: /[^\s\S]/,
+      lowercase: /[a-z]/,
+      uppercase: /[A-Z]/,
+      digit: /\d/,
+      specialChar: /[!@#$%^&*()\-_=+[{\]}\\|;:'",<.>/?]/
+    };
+  
+    // Check each pattern and increment the score
+    for (const pattern in patterns) {
+      if (patterns[pattern].test(password)) {
+        score++;
+      }
+    }
+  
+    if (score > 2 && password.length < 12) {
+      score--;
+    }
+  
+    if (score === 5 && password.length >= 16) {
+      score++;
+    }
+  
+    // Return the password strength level
+    if (score === 0) {
+      return "None";
+    } else if (score === 1) {
+      return "Weak";
+    } else if (score === 2) {
+      return "Moderate";
+    } else if (score === 3) {
+      return "Strong";
+    } else if (score >= 4) {
+      return "Very Strong";
+    }
+  };
+  
 
 
   const togglePasswordVisibility = () => {
@@ -83,6 +134,7 @@ const AllPasswords = () => {
     setPassword(passwordEntry.password);
     setWebsite(passwordEntry.website);
     setInFavorites(passwordEntry.inFavorites);
+    updatePasswordStrength(passwordEntry.password);
   }
 
 
@@ -202,7 +254,14 @@ const AllPasswords = () => {
             
             <div className="mb-0">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Password:</label>
-              <input type={showPassword ? "text" : "password"} className="form-control form-control-sm" value={password} onChange={(e) => setPassword(e.target.value)}/>
+              <input type={showPassword ? "text" : "password"} className="form-control form-control-sm" value={password}  onChange={(e) => {
+                setPassword(e.target.value);
+                updatePasswordStrength(e.target.value);
+              }}
+              />
+            </div>
+            <div className="mb-2">
+              <div>Password Strength: {passwordStrength}</div>
             </div>
             <div className="mb-2">
               <button type="button" className="btn btn-secondary btn-sm" onClick={togglePasswordVisibility}>{showPassword ? "Hide" : "Show"}</button>
