@@ -10,6 +10,7 @@ import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/profile.component";
 import AllPasswords from "./components/AllPasswords";
+import Favorites from "./components/Favorites";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 
@@ -87,6 +88,14 @@ const App = () => {
               </Link>
             </li>
           )}
+
+          {currentUser && (
+            <li className="nav-item">
+              <Link to={"/favorites"} className="nav-link">
+                Favorites
+              </Link>
+            </li>
+          )}
         </div>
 
         {currentUser ? (
@@ -127,6 +136,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/passwords" element={<AllPasswords />} />
+          <Route path="/favorites" element={<Favorites />} />
           <Route path="/mod" element={<BoardModerator />} />
           <Route path="/admin" element={<BoardAdmin />} />
         </Routes>

@@ -24,6 +24,10 @@ class UserService {
     return axios.get(API_URL + 'password-entries', { headers: authHeader() });
   }
 
+  getUserPasswordEntriesInFavorites() {
+    return axios.get(API_URL + 'password-entries/favorites', { headers: authHeader() });
+  }
+
   getPasswordEntryById(id) {
     return axios.get(API_URL + 'password-entries/' + id, { headers: authHeader() });
   }
