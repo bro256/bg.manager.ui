@@ -75,7 +75,8 @@ const FavoritesList = ({ passwordEntries, editPasswordEntry }) => {
         )}
       </td>
             <td>{passwordEntry.title}</td>
-            <td>{passwordEntry.website}</td>
+            <td>{passwordEntry.website.length > 30 ? `${passwordEntry.website.substring(0, 30)}...` : passwordEntry.website}</td>
+
             <td>
               <button
                 type="button"
