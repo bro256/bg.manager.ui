@@ -11,6 +11,7 @@ import Home from "./components/home.component";
 import Profile from "./components/profile.component";
 import AllPasswords from "./components/AllPasswords";
 import Favorites from "./components/Favorites";
+import Trash from "./components/Trash";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 
@@ -96,6 +97,14 @@ const App = () => {
               </Link>
             </li>
           )}
+
+        {currentUser && (
+            <li className="nav-item">
+              <Link to={"/trash"} className="nav-link">
+                Trash
+              </Link>
+            </li>
+          )}
         </div>
 
         {currentUser ? (
@@ -137,6 +146,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/passwords" element={<AllPasswords />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/trash" element={<Trash />} />
           <Route path="/mod" element={<BoardModerator />} />
           <Route path="/admin" element={<BoardAdmin />} />
         </Routes>
