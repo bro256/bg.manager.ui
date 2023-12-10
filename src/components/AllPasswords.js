@@ -5,6 +5,7 @@ import CryptoJS from "crypto-js";
 import { encryptPassword, decryptPassword } from "../utils/cryptoUtils";
 
 
+
 const AllPasswords = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
   const [id, setId] = useState("");
@@ -18,9 +19,23 @@ const AllPasswords = () => {
   const [inTrash, setInTrash] = useState(false);
 
 
+
   useEffect(() => {
     updatePasswordStrength(password);
   }, [password]);
+
+
+  useEffect(() => {
+    loadPasswordEntries();
+  }, []);
+
+
+  useEffect(() => {
+    if (id) {
+      updatePasswordEntry();
+    }
+  }, [inTrash]);
+
 
 
   const updatePasswordStrength = (password) => {
@@ -186,30 +201,11 @@ const AllPasswords = () => {
   };
   
 
-  const moveToTrash = async (id) => {
-    try {
-      // Update the inTrash status on the server
-      await UserService.updatePasswordEntry(id, { inTrash: true });
-  
-      // Refresh the list of password entries
-      loadPasswordEntries();
-    } catch (error) {
-      console.error('Error moving to trash:', error);
-      alert('Error moving to trash. Please try again.');
-    }
-  };
-
-
   const deletePasswordEntry =async (id) => {
     await UserService.deletePasswordEntry(id);
     resetFormState();
     loadPasswordEntries();
   }
-
-
-  useEffect(() => {
-    loadPasswordEntries();
-  }, []);
 
 
   const loadPasswordEntries = async () => {
@@ -245,6 +241,10 @@ const AllPasswords = () => {
     }
   };
   
+  const toggleInTrashAndUpdate = () => {
+    setInTrash((prevInTrash) => !prevInTrash);
+    // Note: The useEffect hook will handle the updatePasswordEntry call
+  };
   
   return (
     <div className="container mt-4">
@@ -317,7 +317,7 @@ const AllPasswords = () => {
               <button className="btn btn-primary btn-sm" onClick={savePasswordEntry}>Add</button>
               <button className="btn btn-primary btn-sm mx-2" onClick={updatePasswordEntry}>Update</button>
               <button className="btn btn-primary btn-sm" onClick={resetFormState}>Clear</button>
-              <button className="btn btn-danger btn-sm mx-2" onClick={() => moveToTrash(id)}>To Trash</button>
+              <button className="btn btn-danger btn-sm mx-2" onClick={toggleInTrashAndUpdate}>To Trash</button>
               <button className="btn btn-danger btn-sm" onClick={() => deletePasswordEntry(id)}>Delete</button>
             </div>
           </form>
