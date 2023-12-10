@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UserService from "../services/user.service";
-import FavoritesList from "./TrashList";
+import TrashList from "./TrashList";
 import { decryptPassword } from "../utils/cryptoUtils";
 
 
@@ -15,27 +15,11 @@ const Trash = () => {
 
   const loadPasswordEntries = async () => {
     try {
-      const result = await UserService.getUserPasswordEntriesInFavorites();
+      const result = await UserService.getUserPasswordEntriesInTrash();
 
       // Check if there are entries
       if (result.data && result.data.length > 0) {
-        // Decrypt the passwords before setting the state
-        const decryptedEntries = result.data
-          .filter(entry => !entry.inTrash)
-          .map(entry => {
-      
-          try {
-            return {
-              ...entry,
-              password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
-            };
-          } catch (error) {
-            console.error('Error decrypting entry:', entry, 'Error:', error);
-            return entry; // Return the original entry to avoid breaking the map function
-          }
-
-        });
-        setPasswordEntries(decryptedEntries);
+        setPasswordEntries(result.data);
       } else {
         // No entries, set passwordEntries to an empty array
         setPasswordEntries([]);
@@ -52,7 +36,7 @@ const Trash = () => {
       <div className="row">
 
         <div className="col-md-12">
-          <FavoritesList
+          <TrashList
               passwordEntries={passwordEntries}
           />
         </div>
