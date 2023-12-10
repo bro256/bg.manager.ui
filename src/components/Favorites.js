@@ -6,28 +6,11 @@ import { decryptPassword } from "../utils/cryptoUtils";
 
 const Favorites = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
-  const [id, setId] = useState("");
-  const [title, setTitle] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [website, setWebsite] = useState("");
-  const [inFavorites, setInFavorites] = useState(false);
-  const [inTrash, setInTrash] = useState(false);
-
 
 
   useEffect(() => {
     loadPasswordEntries();
   }, []);
-
-  const editPasswordEntry = async (passwordEntry) => {
-    setId(passwordEntry.id);
-    setTitle(passwordEntry.title);
-    setUsername(passwordEntry.username);
-    setPassword(passwordEntry.password);
-    setWebsite(passwordEntry.website);
-    setInFavorites(passwordEntry.inFavorites);
-  }
 
 
   const loadPasswordEntries = async () => {
@@ -63,10 +46,6 @@ const Favorites = () => {
     }
   };
   
-  const toggleInTrashAndUpdate = () => {
-    setInTrash((prevInTrash) => !prevInTrash);
-    // Note: The useEffect hook will handle the updatePasswordEntry call
-  };
   
   return (
     <div className="container mt-4">
@@ -75,7 +54,6 @@ const Favorites = () => {
         <div className="col-md-12">
           <FavoritesList
               passwordEntries={passwordEntries}
-              editPasswordEntry={editPasswordEntry}
           />
         </div>
       </div>

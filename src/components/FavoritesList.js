@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
-const FavoritesList = ({ passwordEntries, editPasswordEntry }) => {
+const FavoritesList = ({ passwordEntries}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [passwordVisibility, setPasswordVisibility] = useState({});
 
 
   // Pagination
-  const entriesPerPage = 30; // Items per page. Adjust as needed
+  const entriesPerPage = 20; // Items per page. Adjust as needed
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
   const currentEntries = passwordEntries.slice(indexOfFirstEntry, indexOfLastEntry);
@@ -26,7 +26,6 @@ const FavoritesList = ({ passwordEntries, editPasswordEntry }) => {
   };
   
   
-
 
   const copyToClipboard = async (text) => {
     try {
@@ -57,11 +56,10 @@ const FavoritesList = ({ passwordEntries, editPasswordEntry }) => {
           <th scope="col">Password</th>
           <th scope="col"></th>
           <th scope="col">Modified</th>
-
         </tr>
       </thead>
       {currentEntries.map((passwordEntry, index) => (
-  <tbody key={passwordEntry.id} onClick={() => editPasswordEntry(passwordEntry)} style={{ cursor: 'pointer' }}>
+  <tbody key={passwordEntry.id}>
     <tr>
       <td>
         {passwordEntry.inFavorites ? (
@@ -107,7 +105,7 @@ const FavoritesList = ({ passwordEntries, editPasswordEntry }) => {
             <button
                 type="button"
                 className="btn btn-secondary btn-sm mx-2"
-                onClick={() => copyToClipboard(passwordEntry.encryptedPassword)}
+                onClick={() => copyToClipboard(passwordEntry.password)}
               >
                 copy
               </button>
