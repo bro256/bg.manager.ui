@@ -32,6 +32,10 @@ class UserService {
     return axios.get(API_URL + 'password-entries/trash', { headers: authHeader() });
   }
 
+  togglePasswordEntryInTrash(id) {
+    return axios.put(API_URL + 'password-entries/trash/' + id, null, { headers: authHeader() });
+  }
+  
   getPasswordEntryById(id) {
     return axios.get(API_URL + 'password-entries/' + id, { headers: authHeader() });
   }

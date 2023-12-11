@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from "react";
 import UserService from "../services/user.service";
 import TrashList from "./TrashList";
-import { decryptPassword } from "../utils/cryptoUtils";
+
+
 
 
 const Trash = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
+  const [inTrash, setInTrash] = useState(true);
 
 
   useEffect(() => {
     loadPasswordEntries();
   }, []);
+
+  const toggleInTrashAndUpdate = async (id) => {
+    try {
+      // Make a GET request to toggle the inTrash status
+      await UserService.togglePasswordEntryInTrash(id);
+      loadPasswordEntries();
+  
+    } catch (error) {
+      console.error("Error toggling inTrash status", error);
+      alert("Error toggling inTrash status. Please try again.");
+    }
+  };
 
 
   const loadPasswordEntries = async () => {
@@ -29,6 +43,8 @@ const Trash = () => {
       alert("Error loading password entries. Please try again.");
     }
   };
+
+
   
   
   return (
@@ -38,6 +54,7 @@ const Trash = () => {
         <div className="col-md-12">
           <TrashList
               passwordEntries={passwordEntries}
+              toggleInTrashAndUpdate={toggleInTrashAndUpdate}
           />
         </div>
       </div>
