@@ -7,7 +7,8 @@ import AuthService from "./services/auth.service";
 
 import Login from "./components/login.component";
 import Register from "./components/register.component";
-import Home from "./components/home.component";
+// import Home from "./components/home.component";
+import Home from "./components/Home";
 import Profile from "./components/profile.component";
 import AllPasswords from "./components/AllPasswords";
 import Favorites from "./components/Favorites";

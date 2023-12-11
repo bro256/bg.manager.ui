@@ -8,6 +8,7 @@ import { calculatePasswordStrength, generateRandomPassword } from "../utils/pass
 
 const AllPasswords = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
+
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [username, setUsername] = useState("");
@@ -20,7 +21,6 @@ const AllPasswords = () => {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([]);
-
   const [searchTerm, setSearchTerm] = useState("");
 
 
@@ -48,7 +48,6 @@ const AllPasswords = () => {
       setCategories(response.data);
     } catch (error) {
       console.error("Error loading categories", error);
-      // Handle error loading categories
     }
   };
 
@@ -56,9 +55,6 @@ const AllPasswords = () => {
     const strength = calculatePasswordStrength(password);
     setPasswordStrength(strength);
   };
-
-
-
 
 
   const togglePasswordVisibility = () => {
