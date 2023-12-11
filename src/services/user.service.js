@@ -52,6 +52,10 @@ class UserService {
   deletePasswordEntry(id) {
     return axios.delete(API_URL + 'password-entries/' + id, { headers: authHeader() });
   }
+
+  getCategories() {
+    return axios.get(API_URL + 'categories', { headers: authHeader() });
+  }
   
 }
 

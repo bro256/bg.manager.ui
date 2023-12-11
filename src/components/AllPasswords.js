@@ -18,16 +18,20 @@ const AllPasswords = () => {
   const [passwordStrength, setPasswordStrength] = useState("None");
   const [inTrash, setInTrash] = useState(false);
 
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
+
+
+
+  useEffect(() => {
+    loadPasswordEntries();
+    loadCategories();
+  }, []);
 
 
   useEffect(() => {
     updatePasswordStrength(password);
   }, [password]);
-
-
-  useEffect(() => {
-    loadPasswordEntries();
-  }, []);
 
 
   useEffect(() => {
@@ -37,13 +41,22 @@ const AllPasswords = () => {
   }, [inTrash]);
 
 
+  const loadCategories = async () => {
+    try {
+      const response = await UserService.getCategories();
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error loading categories", error);
+      // Handle error loading categories
+    }
+  };
 
   const updatePasswordStrength = (password) => {
     const strength = calculatePasswordStrength(password);
-    setPasswordStrength(strength);  
+    setPasswordStrength(strength);
   };
 
-  
+
   const calculatePasswordStrength = (password) => {
     let score = 0;
     const patterns = {
@@ -53,22 +66,22 @@ const AllPasswords = () => {
       digit: /\d/,
       specialChar: /[!@#$%^&*()\-_=+[{\]}\\|;:'",<.>/?]/
     };
-  
+
     // Check each pattern and increment the score
     for (const pattern in patterns) {
       if (patterns[pattern].test(password)) {
         score++;
       }
     }
-  
+
     if (score > 2 && password.length < 12) {
       score--;
     }
-  
+
     if (score === 5 && password.length >= 16) {
       score++;
     }
-  
+
     // Return the password strength level
     if (score === 0) {
       return "None";
@@ -87,15 +100,15 @@ const AllPasswords = () => {
   const generateRandomPassword = (length = 12) => {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
     let password = "";
-    
-    for (let i = 0; i < length; i++){
+
+    for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * charset.length);
       password += charset[randomIndex];
     }
 
     return password;
   }
-  
+
 
 
   const togglePasswordVisibility = () => {
@@ -116,7 +129,7 @@ const AllPasswords = () => {
   const openWebsite = (url) => {
     window.open(url, '_blank');
   };
-  
+
 
   const resetFormState = () => {
     setId("");
@@ -126,6 +139,7 @@ const AllPasswords = () => {
     setWebsite("");
     setInFavorites(false);
     setShowPassword(false);
+    setSelectedCategory(null);
   };
 
 
@@ -136,7 +150,7 @@ const AllPasswords = () => {
     const derivedKey = sessionStorage.getItem('derivedKey');
     // Encrypt the password using the derived key
     const { encryptedPassword, encryptionIv } = await encryptPassword(password, derivedKey);
-  
+
     console.log("Encrypted values before saving:", encryptedPassword, encryptionIv);
     const passwordEntryData = {
       title: title,
@@ -146,8 +160,9 @@ const AllPasswords = () => {
       website: website,
       inFavorites: inFavorites,
       inTrash: inTrash,
+      category: selectedCategory,
     };
-  
+
     try {
       await UserService.savePasswordEntry(passwordEntryData);
       resetFormState();
@@ -157,7 +172,7 @@ const AllPasswords = () => {
       alert("Error saving password entry. Please try again.");
     }
   };
-  
+
 
   const editPasswordEntry = async (passwordEntry) => {
     setId(passwordEntry.id);
@@ -166,6 +181,7 @@ const AllPasswords = () => {
     setPassword(passwordEntry.password);
     setWebsite(passwordEntry.website);
     setInFavorites(passwordEntry.inFavorites);
+    setSelectedCategory(passwordEntry.category);
     updatePasswordStrength(passwordEntry.password);
   }
 
@@ -173,11 +189,11 @@ const AllPasswords = () => {
   const updatePasswordEntry = async () => {
     // Get the derived key from sessionStorage
     const derivedKey = sessionStorage.getItem('derivedKey');
-  
+
     try {
       // Encrypt the password using the derived key
       const { encryptedPassword, encryptionIv } = encryptPassword(password, derivedKey);
-  
+
       const editedPasswordEntry = {
         id: id,
         title: title,
@@ -187,8 +203,9 @@ const AllPasswords = () => {
         website: website,
         inFavorites: inFavorites,
         inTrash: inTrash,
+        category: selectedCategory,
       };
-  
+
       // Send the modified details to the server for update
       const response = await UserService.updatePasswordEntry(id, editedPasswordEntry);
       console.log('Edit response:', response);
@@ -199,9 +216,9 @@ const AllPasswords = () => {
       alert("Error updating password entry. Please try again.");
     }
   };
-  
 
-  const deletePasswordEntry =async (id) => {
+
+  const deletePasswordEntry = async (id) => {
     await UserService.deletePasswordEntry(id);
     resetFormState();
     loadPasswordEntries();
@@ -218,18 +235,18 @@ const AllPasswords = () => {
         const decryptedEntries = result.data
           .filter(entry => !entry.inTrash)
           .map(entry => {
-      
-          try {
-            return {
-              ...entry,
-              password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
-            };
-          } catch (error) {
-            console.error('Error decrypting entry:', entry, 'Error:', error);
-            return entry; // Return the original entry to avoid breaking the map function
-          }
 
-        });
+            try {
+              return {
+                ...entry,
+                password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
+              };
+            } catch (error) {
+              console.error('Error decrypting entry:', entry, 'Error:', error);
+              return entry; // Return the original entry to avoid breaking the map function
+            }
+
+          });
         setPasswordEntries(decryptedEntries);
       } else {
         // No entries, set passwordEntries to an empty array
@@ -240,12 +257,12 @@ const AllPasswords = () => {
       alert("Error loading password entries. Please try again.");
     }
   };
-  
+
   const toggleInTrashAndUpdate = () => {
     setInTrash((prevInTrash) => !prevInTrash);
     // Note: The useEffect hook will handle the updatePasswordEntry call
   };
-  
+
   return (
     <div className="container mt-4">
       <div className="row">
@@ -253,45 +270,65 @@ const AllPasswords = () => {
         <div className="col-md-6">
           {/* Display the list of password entries */}
           <PasswordEntryList
-              passwordEntries={passwordEntries}
-              editPasswordEntry={editPasswordEntry}
-              deletePasswordEntry={deletePasswordEntry}
+            passwordEntries={passwordEntries}
+            editPasswordEntry={editPasswordEntry}
+            deletePasswordEntry={deletePasswordEntry}
           />
         </div>
-        
+
         <div className="col-md-6 ">
           <h2>Password entry information</h2>
 
           {/* Title */}
-          <form  className="row gy-2 gx-3 align-items-center">
+          <form className="row gy-2 gx-3 align-items-center">
             <div className="mb-2">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Title:</label>
-              <input type="text" className="form-control form-control-sm" value={title} onChange={(e) => setTitle(e.target.value)}/>
+              <input type="text" className="form-control form-control-sm" value={title} onChange={(e) => setTitle(e.target.value)} />
             </div>
 
             {/* Website */}
             <div className="mb-0">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Website URL:</label>
-              <input type="text" className="form-control form-control-sm" value={website} onChange={(e) => setWebsite(e.target.value)}/>
+              <input type="text" className="form-control form-control-sm" value={website} onChange={(e) => setWebsite(e.target.value)} />
             </div>
             <div className="mb-2">
               <button type="button" className="btn btn-primary btn-sm" onClick={() => openWebsite(website)}>Visit</button>
               <button type="button" className="btn btn-secondary btn-sm mx-2" onClick={() => copyToClipboard(website)}>Copy</button>
             </div>
 
+            {/* Categories dropdown menu */}
+            <div className="mb-2">
+              <label className="col-sm-2 col-form-label col-form-label-sm">Category:</label>
+              <select
+                className="form-select form-select-sm"
+                value={selectedCategory ? selectedCategory.id : ''}
+                onChange={(e) => {
+                  const categoryId = e.target.value;
+                  setSelectedCategory(categoryId ? categories.find(cat => cat.id === parseInt(categoryId)) : null);
+                }}
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Username */}
             <div className="mb-0">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Username:</label>
-              <input type="text" className="form-control form-control-sm" value={username} onChange={(e) => setUsername(e.target.value)}/>
+              <input type="text" className="form-control form-control-sm" value={username} onChange={(e) => setUsername(e.target.value)} />
             </div>
             <div className="mb-2">
               <button type="button" className="btn btn-secondary btn-sm" onClick={() => copyToClipboard(username)}>Copy</button>
             </div>
-            
+
             {/* Password */}
             <div className="mb-0">
               <label className="ol-sm-2 col-form-label col-form-label-sm">Password:</label>
-              <input type={showPassword ? "text" : "password"} className="form-control form-control-sm" value={password}  onChange={(e) => {
+              <input type={showPassword ? "text" : "password"} className="form-control form-control-sm" value={password} onChange={(e) => {
                 setPassword(e.target.value);
                 updatePasswordStrength(e.target.value);
               }}
@@ -309,8 +346,9 @@ const AllPasswords = () => {
             {/* Favorites */}
             <div className="mb-1 form-check form-switch">
               <label className="ol-sm-2 col-form-label col-form-label-sm"> In Favorites</label>
-              <input type="checkbox" className="form-check-input form-check form-switch md-2" checked={inFavorites} onChange={() => setInFavorites(!inFavorites)}/>
+              <input type="checkbox" className="form-check-input form-check form-switch md-2" checked={inFavorites} onChange={() => setInFavorites(!inFavorites)} />
             </div>
+
 
             {/* Main buttons */}
             <div>
