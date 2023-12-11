@@ -36,7 +36,6 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
 
   return (
     <div className="col-md-10">
-      <h2>Password entries</h2>
       <table className="table table-sm table-hover mt-3" align="center">
         <thead className="thead-light">
           <tr>

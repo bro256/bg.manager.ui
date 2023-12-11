@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UserService from "../services/user.service";
 import PasswordEntryList from "./PasswordEntryList";
-import CryptoJS from "crypto-js";
 import { encryptPassword, decryptPassword } from "../utils/cryptoUtils";
 
 
@@ -21,6 +20,7 @@ const AllPasswords = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([]);
 
+  const [searchTerm, setSearchTerm] = useState("");
 
 
   useEffect(() => {
@@ -225,6 +225,16 @@ const AllPasswords = () => {
   }
 
 
+  const performSearch = () => {
+    loadPasswordEntries();
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      performSearch();
+    }
+  };
+
   const loadPasswordEntries = async () => {
     try {
       const result = await UserService.getUserPasswordEntries();
@@ -247,7 +257,12 @@ const AllPasswords = () => {
             }
 
           });
-        setPasswordEntries(decryptedEntries);
+        // Filter entries
+        const filteredEntries = searchTerm
+          ? decryptedEntries.filter(entry => entry.title.toLowerCase().includes(searchTerm.toLowerCase()))
+          : decryptedEntries;
+
+        setPasswordEntries(filteredEntries);
       } else {
         // No entries, set passwordEntries to an empty array
         setPasswordEntries([]);
@@ -266,8 +281,18 @@ const AllPasswords = () => {
   return (
     <div className="container mt-4">
       <div className="row">
-
+        
+        {/* Search field */}
         <div className="col-md-6">
+        <h2>Password entries</h2>
+          <div className="mb-2">
+            <label className="col-sm-2 col-form-label col-form-label-sm">Search:</label>
+            <div className="input-group">
+              <input type="text" className="form-control form-control-sm" placeholder="Search by title" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyDown={handleKeyPress}/>
+              <button type="button" className="btn btn-primary btn-sm" onClick={performSearch}>Search</button>
+            </div>
+          </div>
+
           {/* Display the list of password entries */}
           <PasswordEntryList
             passwordEntries={passwordEntries}
