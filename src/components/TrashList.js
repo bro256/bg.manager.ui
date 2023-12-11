@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const TrashList = ({ passwordEntries, toggleInTrashAndUpdate }) => {
+const TrashList = ({ passwordEntries, toggleInTrashAndUpdate, deletePasswordEntry }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Pagination
@@ -49,6 +49,7 @@ const TrashList = ({ passwordEntries, toggleInTrashAndUpdate }) => {
               <td>{passwordEntry.username}</td>
               <td>{passwordEntry.updatedAt}</td>
               <td><button className="btn btn-primary btn-sm mx-2" onClick={() => toggleInTrashAndUpdate(passwordEntry.id)}>Restore</button></td>
+              <td><button className="btn btn-danger btn-sm mx-2" onClick={() => deletePasswordEntry(passwordEntry.id)}>Delete</button></td>
             </tr>
           </tbody>
         ))}

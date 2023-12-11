@@ -19,10 +19,45 @@ const Trash = () => {
       // Make a GET request to toggle the inTrash status
       await UserService.togglePasswordEntryInTrash(id);
       loadPasswordEntries();
-  
+
     } catch (error) {
       console.error("Error toggling inTrash status", error);
       alert("Error toggling inTrash status. Please try again.");
+    }
+  };
+
+  const toggleAllInTrashAndUpdate = async () => {
+    try {
+      for (const passwordEntry of passwordEntries) {
+        await UserService.togglePasswordEntryInTrash(passwordEntry.id);
+      }
+      // Make a GET request to toggle the inTrash status
+
+      loadPasswordEntries();
+
+    } catch (error) {
+      console.error("Error toggling all items inTrash status", error);
+      alert("Error toggling all items inTrash status. Please try again.");
+    }
+  };
+
+
+  const deletePasswordEntry = async (id) => {
+    await UserService.deletePasswordEntry(id);
+    loadPasswordEntries();
+  };
+
+
+  const deleteAllInTrash = async () => {
+    try {
+      for (const passwordEntry of passwordEntries) {
+        await UserService.deletePasswordEntry(passwordEntry.id);
+      }
+
+      loadPasswordEntries();
+    } catch (error) {
+      console.error("Error deleting all items in trash", error);
+      alert("Error deleting all items in trash. Please try again.");
     }
   };
 
@@ -45,17 +80,24 @@ const Trash = () => {
   };
 
 
-  
-  
+
   return (
     <div className="container mt-4">
       <div className="row">
 
         <div className="col-md-12">
           <TrashList
-              passwordEntries={passwordEntries}
-              toggleInTrashAndUpdate={toggleInTrashAndUpdate}
+            passwordEntries={passwordEntries}
+            toggleInTrashAndUpdate={toggleInTrashAndUpdate}
+            deletePasswordEntry={deletePasswordEntry}
+            deleteAllInTrash={deleteAllInTrash}
           />
+          {passwordEntries.length > 0 && (
+            <div>
+              <button className="btn btn-primary btn-sm" onClick={toggleAllInTrashAndUpdate}>Restore All</button>
+              <button className="btn btn-danger btn-sm mx-2" onClick={deleteAllInTrash}>Delete</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
