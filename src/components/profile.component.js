@@ -30,17 +30,12 @@ const Profile = () => {
       {state.userReady ? (
         <div>
           <header className="jumbotron">
-            <h3>
-              <strong>{currentUser.username}</strong> Profile
-            </h3>
+            <h3>User Account</h3>
           </header>
 
-          <p>
-            <strong>User Id:</strong> {currentUser.id}
-          </p>
-          <p>
-            <strong>Email:</strong> {currentUser.email}
-          </p>
+          <p><strong>User Name:</strong> {currentUser.username}</p>
+          <p><strong>User Id:</strong> {currentUser.id}</p>
+          <p><strong>Email:</strong> {currentUser.email}</p>
           <strong>User roles:</strong>
           <ul>
             {currentUser.roles &&
