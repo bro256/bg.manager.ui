@@ -23,3 +23,11 @@ Frontend application for Password manager API.
 - **Generated key length:** 256 bits
 - Implemented in accordance with official Crypto-js package
 
+### Symmetric encryption
+- **Algorithm:** AES-256
+- **Key length:** 256 bits
+- **Mode:** CBC (Cipher Block Chaining)
+- **Block size:** 128 bits
+- **Initialization vector (IV):** 96 bits, random, different for every record
+- Implemented in accordance with official Crypto-js package
+
