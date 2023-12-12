@@ -1,4 +1,4 @@
-# React based password manager for Password manager API
+# Password Manager app for Password Manager API
 
 ## About
 Project is still in progress!
