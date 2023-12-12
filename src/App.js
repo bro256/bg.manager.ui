@@ -107,7 +107,7 @@ const App = () => {
             {currentUser && (
               <li className="nav-item">
                 <Link to={"/passwords"} className="nav-link">
-                  Passwords
+                  All Passwords
                 </Link>
               </li>
             )}
@@ -132,12 +132,13 @@ const App = () => {
               <div className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav-link">
-                    {currentUser.username}
+                    {/* {currentUser.username} */}
+                    Profile
                   </Link>
                 </li>
                 <li className="nav-item">
                   <a href="/login" className="nav-link" onClick={logOut}>
-                    LogOut
+                    Log Out
                   </a>
                 </li>
               </div>
