@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
 
-const BoardAdmin = () => {
+const Admin = () => {
   const [state, setState] = useState({
     content: ""
   });
@@ -40,4 +40,4 @@ const BoardAdmin = () => {
   );
 };
 
-export default BoardAdmin;
+export default Admin;
