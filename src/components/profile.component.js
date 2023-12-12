@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
+import UserService from "../services/user.service";
+import { decryptPassword } from "../utils/cryptoUtils";
 
 import { CSVLink, CSVDownload } from "react-csv";
 
 const Profile = () => {
+  const [passwordEntries, setPasswordEntries] = useState([]);
+
   const [state, setState] = useState({
     redirect: null,
     userReady: false,
@@ -18,12 +22,50 @@ const Profile = () => {
       setState({ redirect: "/home" });
     } else {
       setState({ currentUser: currentUser, userReady: true });
+      loadPasswordEntries();
     }
   }, []);
 
   if (state.redirect) {
     return <Navigate to={state.redirect} />;
   }
+
+
+
+  const loadPasswordEntries = async () => {
+    try {
+      const result = await UserService.getUserPasswordEntries();
+      if (result.data && result.data.length > 0) {
+        const decryptedEntries = result.data
+          .filter(entry => !entry.inTrash)
+          .map(entry => {
+            try {
+              return {
+                ...entry,
+                password: decryptPassword(
+                  entry.encryptedPassword,
+                  entry.encryptionIv,
+                  sessionStorage.getItem("derivedKey")
+                ),
+              };
+            } catch (error) {
+              console.error("Error decrypting entry:", entry, "Error:", error);
+              return entry;
+            }
+          });
+        setPasswordEntries(decryptedEntries);
+      } else {
+        // No entries, set passwordEntries to an empty array
+        setPasswordEntries([]);
+      }
+    } catch (error) {
+      console.error("Error loading password entries", error);
+      alert("Error loading password entries. Please try again.");
+    }
+  };
+
+
+
 
   const csvData = [
     ["firstname", "lastname", "email"],
@@ -53,12 +95,20 @@ const Profile = () => {
                 <li key={index}>{role}</li>
               ))}
           </ul>
-          <p>
+          {/* <p>
             <strong>Token:</strong>{" "}
             {currentUser.accessToken.substr(currentUser.accessToken)}
-          </p>
+          </p> */}
           <div>
-            <CSVLink data={csvData}>Export to CSV</CSVLink>
+          <CSVLink
+                data={passwordEntries.map((entry) => ({
+                  Username: entry.username,
+                  Password: entry.password,
+                }))}
+                filename={"password_entries.csv"}
+              >
+                Export to CSV
+              </CSVLink>
           </div>
         </div>
       ) : null}
