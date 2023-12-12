@@ -24,6 +24,8 @@ const App = () => {
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
 
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
   useEffect(() => {
     const user = AuthService.getCurrentUser();
 
@@ -47,11 +49,15 @@ const App = () => {
   const logOut = () => {
     // Remove the derived key from session storage
     sessionStorage.removeItem('derivedKey');
-   
+
     AuthService.logout();
     setShowModeratorBoard(false);
     setShowAdminBoard(false);
     setCurrentUser(undefined);
+  };
+
+  const toggleMobileNav = () => {
+    setIsMobileNavOpen(!isMobileNavOpen);
   };
 
   return (
@@ -60,82 +66,102 @@ const App = () => {
         <Link to={"/"} className="navbar-brand">
           Password Manager
         </Link>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/home"} className="nav-link">
-              Home
-            </Link>
-          </li>
 
-          {showModeratorBoard && (
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          onClick={toggleMobileNav}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className={`collapse navbar-collapse ${isMobileNavOpen ? "show" : ""}`} id="navbarNav">
+          <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/mod"} className="nav-link">
-                Moderator
+              <Link to={"/home"} className="nav-link">
+                Home
               </Link>
             </li>
-          )}
 
-          {showAdminBoard && (
-            <li className="nav-item">
-              <Link to={"/admin"} className="nav-link">
-                Admin
-              </Link>
-            </li>
-          )}
+            {showModeratorBoard && (
+              <li className="nav-item">
+                <Link to={"/mod"} className="nav-link">
+                  Moderator
+                </Link>
+              </li>
+            )}
 
-          {currentUser && (
-            <li className="nav-item">
-              <Link to={"/passwords"} className="nav-link">
-                Passwords
-              </Link>
-            </li>
-          )}
+            {showAdminBoard && (
+              <li className="nav-item">
+                <Link to={"/admin"} className="nav-link">
+                  Admin
+                </Link>
+              </li>
+            )}
 
-          {currentUser && (
-            <li className="nav-item">
-              <Link to={"/favorites"} className="nav-link">
-                Favorites
-              </Link>
-            </li>
-          )}
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/passwords"} className="nav-link">
+                  Passwords
+                </Link>
+              </li>
+            )}
 
-        {currentUser && (
-            <li className="nav-item">
-              <Link to={"/trash"} className="nav-link">
-                Trash
-              </Link>
-            </li>
-          )}
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/favorites"} className="nav-link">
+                  Favorites
+                </Link>
+              </li>
+            )}
+
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/trash"} className="nav-link">
+                  Trash
+                </Link>
+              </li>
+            )}
+
+            {currentUser ? (
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/profile"} className="nav-link">
+                    {currentUser.username}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <a href="/login" className="nav-link" onClick={logOut}>
+                    LogOut
+                  </a>
+                </li>
+              </div>
+            ) : (
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/login"} className="nav-link">
+                    Login
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link to={"/register"} className="nav-link">
+                    Sign Up
+                  </Link>
+                </li>
+              </div>
+            )}
+
+
+          </div>
         </div>
 
-        {currentUser ? (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/profile"} className="nav-link">
-                {currentUser.username}
-              </Link>
-            </li>
-            <li className="nav-item">
-              <a href="/login" className="nav-link" onClick={logOut}>
-                LogOut
-              </a>
-            </li>
-          </div>
-        ) : (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/login"} className="nav-link">
-                Login
-              </Link>
-            </li>
 
-            <li className="nav-item">
-              <Link to={"/register"} className="nav-link">
-                Sign Up
-              </Link>
-            </li>
-          </div>
-        )}
       </nav>
 
       <div className="container mt-3">
