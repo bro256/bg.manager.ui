@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordEntry }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [passwordVisibility, setPasswordVisibility] = useState({});
+  // const [passwordVisibility, setPasswordVisibility] = useState({});
 
   // Pagination
   const entriesPerPage = 30; // Items per page. Adjust as needed
@@ -12,12 +12,12 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
   const totalPages = Math.ceil(passwordEntries.length / entriesPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const togglePasswordVisibility = (id) => {
-    setPasswordVisibility((prevVisibility) => ({
-      ...prevVisibility,
-      [id]: !prevVisibility[id] || false,
-    }));
-  };
+  // const togglePasswordVisibility = (id) => {
+  //   setPasswordVisibility((prevVisibility) => ({
+  //     ...prevVisibility,
+  //     [id]: !prevVisibility[id] || false,
+  //   }));
+  // };
 
   const copyToClipboard = async (text) => {
     try {
@@ -39,10 +39,10 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
       <table className="table table-sm table-hover mt-3" align="center">
         <thead className="thead-light">
           <tr>
-            <th scope="col"></th>
-            <th scope="col">Title</th>
-            {/* <th scope="col">Website URL</th> */}
-            <th scope="col">Username</th>
+            <th style={{ width: '4%' }} scope="col"></th>
+            <th style={{ width: '32%' }} scope="col">Title</th>
+            <th style={{ width: '32%' }} scope="col">Website URL</th>
+            <th style={{ width: '32%' }} scope="col">Username</th>
             {/* <th scope="col"></th>
           <th scope="col">Password</th>
           <th scope="col"></th>
@@ -64,9 +64,10 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
                   </span>
                 )}
               </td>
-              <td>{passwordEntry.title}</td>
-              {/* <td>{passwordEntry.website}</td> */}
-              <td>{passwordEntry.username}</td>
+              <td>{passwordEntry.title.length > 20 ? `${passwordEntry.title.substring(0, 20)}...` : passwordEntry.title}</td>
+              <td>{passwordEntry.website.length > 35 ? `${passwordEntry.website.substring(0, 35)}...` : passwordEntry.website}</td>
+              <td>{passwordEntry.username.length > 30 ? `${passwordEntry.username.substring(0, 30)}...` : passwordEntry.username}</td>
+
               {/* <td>
               <button
                 type="button"

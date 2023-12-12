@@ -227,14 +227,15 @@ const AllPasswords = () => {
   return (
     <div className="container mt-4">
       <div className="row">
-        
+
         {/* Search field */}
-        <div className="col-md-6">
-        <h2>Password entries</h2>
-          <div className="mb-2">
+        <div className="col-md-8">
+
+          <h2>Password entries</h2>
+          <div className="col-md-4 mb-2">
             <label className="col-sm-2 col-form-label col-form-label-sm">Search:</label>
             <div className="input-group">
-              <input type="text" className="form-control form-control-sm" placeholder="Search by title" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyDown={handleKeyPress}/>
+              <input type="text" className="form-control form-control-sm" placeholder="Search by title" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onKeyDown={handleKeyPress} />
               <button type="button" className="btn btn-primary btn-sm" onClick={performSearch}>Search</button>
             </div>
           </div>
@@ -247,7 +248,7 @@ const AllPasswords = () => {
           />
         </div>
 
-        <div className="col-md-6 ">
+        <div className="col-md-4 ">
           <h2>Password entry information</h2>
 
           {/* Title */}
@@ -316,18 +317,18 @@ const AllPasswords = () => {
 
             {/* Favorites */}
             <div className="mb-1 form-check form-switch">
-              <label className="ol-sm-2 col-form-label col-form-label-sm"> In Favorites</label>
+              <label className="ol-sm-2 col-form-label col-form-label-sm mx-2">In Favorites</label>
               <input type="checkbox" className="form-check-input form-check form-switch md-2" checked={inFavorites} onChange={() => setInFavorites(!inFavorites)} />
             </div>
 
 
             {/* Main buttons */}
-            <div>
+            <div className="mb-3">
               <button className="btn btn-primary btn-sm" onClick={savePasswordEntry}>Add</button>
               <button className="btn btn-primary btn-sm mx-2" onClick={updatePasswordEntry}>Update</button>
               <button className="btn btn-primary btn-sm" onClick={resetFormState}>Clear</button>
               <button className="btn btn-danger btn-sm mx-2" onClick={toggleInTrashAndUpdate}>To Trash</button>
-              <button className="btn btn-danger btn-sm" onClick={() => deletePasswordEntry(id)}>Delete</button>
+              {/* <button className="btn btn-danger btn-sm" onClick={() => deletePasswordEntry(id)}>Delete</button> */}
             </div>
           </form>
         </div>
