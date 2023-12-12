@@ -65,16 +65,6 @@ const Profile = () => {
   };
 
 
-
-
-  const csvData = [
-    ["firstname", "lastname", "email"],
-    ["Ahmed", "Tomi", "ah@smthing.co.com"],
-    ["Raed", "Labes", "rl@smthing.co.com"],
-    ["Yezzi", "Min l3b", "ymin@cocococo.com"]
-  ];
-
-
   const { currentUser } = state;
 
   return (
@@ -100,15 +90,30 @@ const Profile = () => {
             {currentUser.accessToken.substr(currentUser.accessToken)}
           </p> */}
           <div>
-          <CSVLink
-                data={passwordEntries.map((entry) => ({
-                  Username: entry.username,
-                  Password: entry.password,
-                }))}
-                filename={"password_entries.csv"}
-              >
-                Export to CSV
-              </CSVLink>
+
+            <div>
+              <div class="card-body">
+                <h3 class="card-title">Export Passwords</h3>
+                <div class="row">
+                  <div class="col">
+                    <p>Your passwords will be saved in .CSV file in such format: title, website, username, password. <strong>Store the .CSV files securely, preferably in a location that is not directly accessible from the internet. This prevents unauthorized access to your passwords.</strong> To make sure your passwords are formatted properly, open your .CSV file. </p>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <CSVLink
+                    data={passwordEntries.map((entry) => ({
+                      Title: entry.title,
+                      Website: entry.website,
+                      Username: entry.username,
+                      Password: entry.password,
+                    }))}
+                    filename={"password_entries.csv"}
+                  >
+                    Export to CSV
+                  </CSVLink>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ) : null}
