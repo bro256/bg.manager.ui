@@ -38,12 +38,12 @@ const FavoritesList = ({ passwordEntries}) => {
 
 
   if (!passwordEntries || passwordEntries.length === 0) {
-    return <p>No password entries found.</p>;
+    return <p>No password entries found in.</p>;
   }
 
   return (
     <div className="col-md-12">
-      <h2>Password entries</h2>
+      <h2>Favorites</h2>
       <table className="table table-sm table-hover mt-3" align="center">
       <thead className="thead-light">
         <tr>

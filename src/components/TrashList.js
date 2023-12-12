@@ -13,7 +13,7 @@ const TrashList = ({ passwordEntries, toggleInTrashAndUpdate, deletePasswordEntr
 
 
   if (!passwordEntries || passwordEntries.length === 0) {
-    return <p>No password entries found.</p>;
+    return <p>No password entries found in trash.</p>;
   }
 
   return (
