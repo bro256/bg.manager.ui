@@ -37,6 +37,23 @@ const calculatePasswordStrength = (password) => {
   }
 };
 
+const getColorForPasswordStrength = (strength) => {
+  switch (strength) {
+    case 'None':
+      return 'gray';
+    case 'Weak':
+      return 'red';
+    case 'Moderate':
+      return 'orange';
+    case 'Strong':
+      return 'blue';
+    case 'Very Strong':
+      return 'green';
+    default:
+      return '';
+  }
+};
+
 
 const generateRandomPassword = (length = 12) => {
   const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
@@ -50,4 +67,4 @@ const generateRandomPassword = (length = 12) => {
   return password;
 }
 
-export { calculatePasswordStrength, generateRandomPassword };
+export { calculatePasswordStrength, generateRandomPassword, getColorForPasswordStrength };
