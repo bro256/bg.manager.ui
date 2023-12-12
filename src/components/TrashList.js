@@ -26,7 +26,7 @@ const TrashList = ({ passwordEntries, toggleInTrashAndUpdate, deletePasswordEntr
             <th scope="col">Title</th>
             <th scope="col">Website URL</th>
             <th scope="col">Username</th>
-            <th scope="col">Modified</th>
+            <th scope="col">Moved to trash time</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -44,12 +44,13 @@ const TrashList = ({ passwordEntries, toggleInTrashAndUpdate, deletePasswordEntr
                   </span>
                 )}
               </td>
-              <td>{passwordEntry.title}</td>
-              <td>{passwordEntry.website.length > 30 ? `${passwordEntry.website.substring(0, 30)}...` : passwordEntry.website}</td>
-              <td>{passwordEntry.username}</td>
-              <td>{passwordEntry.updatedAt}</td>
-              <td><button className="btn btn-primary btn-sm mx-2" onClick={() => toggleInTrashAndUpdate(passwordEntry.id)}>Restore</button></td>
-              <td><button className="btn btn-danger btn-sm mx-2" onClick={() => deletePasswordEntry(passwordEntry.id)}>Delete</button></td>
+              <td style={{ width: '15%' }}>{passwordEntry.title.length > 20 ? `${passwordEntry.title.substring(0, 20)}...` : passwordEntry.title}</td>
+              <td style={{ width: '25%' }}>{passwordEntry.website.length > 35 ? `${passwordEntry.website.substring(0, 35)}...` : passwordEntry.website}</td>
+              <td style={{ width: '20%' }}>{passwordEntry.username.length > 30 ? `${passwordEntry.username.substring(0, 30)}...` : passwordEntry.username}</td>
+              <td style={{ width: '20%' }}>{new Date(passwordEntry.updatedAt).toLocaleString('lt-LT')}</td>
+              <td style={{ width: '20%' }}>
+                <button className="btn btn-primary btn-sm mx-2" onClick={() => toggleInTrashAndUpdate(passwordEntry.id)}>Restore</button>
+                <button className="btn btn-danger btn-sm mx-2" onClick={() => deletePasswordEntry(passwordEntry.id)}>Delete</button></td>
             </tr>
           </tbody>
         ))}

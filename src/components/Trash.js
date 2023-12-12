@@ -95,7 +95,7 @@ const Trash = () => {
           {passwordEntries.length > 0 && (
             <div>
               <button className="btn btn-primary btn-sm" onClick={toggleAllInTrashAndUpdate}>Restore All</button>
-              <button className="btn btn-danger btn-sm mx-2" onClick={deleteAllInTrash}>Delete</button>
+              <button className="btn btn-danger btn-sm mx-2" onClick={deleteAllInTrash}>Delete All</button>
             </div>
           )}
         </div>
