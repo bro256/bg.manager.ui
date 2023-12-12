@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
 
+import { CSVLink, CSVDownload } from "react-csv";
+
 const Profile = () => {
   const [state, setState] = useState({
     redirect: null,
@@ -22,6 +24,14 @@ const Profile = () => {
   if (state.redirect) {
     return <Navigate to={state.redirect} />;
   }
+
+  const csvData = [
+    ["firstname", "lastname", "email"],
+    ["Ahmed", "Tomi", "ah@smthing.co.com"],
+    ["Raed", "Labes", "rl@smthing.co.com"],
+    ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+  ];
+
 
   const { currentUser } = state;
 
@@ -47,6 +57,9 @@ const Profile = () => {
             <strong>Token:</strong>{" "}
             {currentUser.accessToken.substr(currentUser.accessToken)}
           </p>
+          <div>
+            <CSVLink data={csvData}>Export to CSV</CSVLink>
+          </div>
         </div>
       ) : null}
     </div>
