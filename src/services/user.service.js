@@ -60,6 +60,10 @@ class UserService {
   getUsers() {
     return axios.get(API_URL + 'users', { headers: authHeader() });
   }
+
+  deleteUser(id) {
+    return axios.delete(API_URL + 'users/' + id, { headers: authHeader() });
+  }
   
 }
 

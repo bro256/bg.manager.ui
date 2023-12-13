@@ -26,6 +26,17 @@ const Admin = () => {
       });
   }, []);
 
+  const handleDelete = (userId) => {
+    UserService.deleteUser(userId)
+    .then((response) => {
+      console.log("Delete user response:", response);
+      setUsers(users.filter((user) => user.id !== userId));
+    })
+    .catch((error) => {
+      console.error("Error deleting user:", error);
+    });
+  };
+
   return (
     <div className="container">
       <header className="jumbotron">
@@ -40,6 +51,7 @@ const Admin = () => {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Roles</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -52,6 +64,9 @@ const Admin = () => {
                     {user.roles.map((role) => (
                       <span key={role.id}>{role.name}, </span>
                     ))}
+                  </td>
+                  <td>
+                    <button onClick={() => handleDelete(user.id)} className="btn btn-danger btn-sm">Delete</button>
                   </td>
                 </tr>
               ))}
