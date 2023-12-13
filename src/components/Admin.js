@@ -3,38 +3,61 @@ import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
 
 const Admin = () => {
-  const [state, setState] = useState({
-    content: ""
-  });
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    UserService.getAdminBoard().then(
-      (response) => {
-        setState({
-          content: response.data
-        });
-      },
-      (error) => {
-        setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
+    UserService.getUsers()
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        setError(
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
             error.message ||
             error.toString()
-        });
+        );
 
         if (error.response && error.response.status === 401) {
           EventBus.dispatch("logout");
         }
-      }
-    );
+      });
   }, []);
 
   return (
     <div className="container">
       <header className="jumbotron">
-        <h3>{state.content}</h3>
+        <h2>Registered Users</h2>
+        {error ? (
+          <p>{error}</p>
+        ) : (
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Roles</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td>{user.username}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    {user.roles.map((role) => (
+                      <span key={role.id}>{role.name}, </span>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </header>
     </div>
   );

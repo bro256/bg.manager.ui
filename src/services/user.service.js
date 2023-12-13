@@ -56,6 +56,10 @@ class UserService {
   getCategories() {
     return axios.get(API_URL + 'categories', { headers: authHeader() });
   }
+
+  getUsers() {
+    return axios.get(API_URL + 'users', { headers: authHeader() });
+  }
   
 }
 
