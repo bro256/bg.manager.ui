@@ -55,16 +55,35 @@ const getColorForPasswordStrength = (strength) => {
 };
 
 
-const generateRandomPassword = (length = 12) => {
-  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
-  let password = "";
+const generateRandomPassword = (length = 12, includeLowercase = true, includeUppercase = true, includeNumbers = true, includeSymbols = true) => {
+  let charset = "";
 
+  if (includeLowercase) {
+    charset += "abcdefghijklmnopqrstuvwxyz";
+  }
+  if (includeUppercase) {
+    charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  }
+  if (includeNumbers) {
+    charset += "0123456789";
+  }
+  if (includeSymbols) {
+    charset += "!@#$%^&*()-_=+[{]}\\|;:',<.>/?";
+  }
+
+  if (charset === "") {
+    console.error("No character set selected for password generation.");
+    return "";
+  }
+
+  let password = "";
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * charset.length);
     password += charset[randomIndex];
   }
 
   return password;
-}
+};
+
 
 export { calculatePasswordStrength, generateRandomPassword, getColorForPasswordStrength };
