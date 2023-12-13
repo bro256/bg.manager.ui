@@ -308,11 +308,11 @@ const AllPasswords = () => {
             </div>
             <div className="mb-2">
             <div>
-              Password Strength:{" "}
-              <span style={{ color: getColorForPasswordStrength(passwordStrength) }}>
-                {passwordStrength}
-              </span>
-            </div>
+            Password Strength:{" "}
+            <span style={{ color: getColorForPasswordStrength(passwordStrength) }}>
+              {passwordStrength}
+            </span>
+          </div>
             </div>
             <div className="mb-2">
               <button type="button" className="btn btn-secondary btn-sm" onClick={() => copyToClipboard(password)}>Copy</button>
@@ -322,7 +322,7 @@ const AllPasswords = () => {
 
             {/* Favorites */}
             <div className="mb-1 form-check form-switch">
-              <label className="col-sm-2 col-form-label col-form-label-sm mx-2">In Favorites</label>
+              <label className="col-sm-4 col-form-label col-form-label-sm mx-2">In Favorites</label>
               <input type="checkbox" className="form-check-input form-check form-switch md-2" checked={inFavorites} onChange={() => setInFavorites(!inFavorites)} />
             </div>
 
