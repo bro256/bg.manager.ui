@@ -13,6 +13,7 @@ import Profile from "./components/Profile";
 import AllPasswords from "./components/AllPasswords";
 import Favorites from "./components/Favorites";
 import Trash from "./components/Trash";
+import Generator from "./components/PasswordGenerator";
 import Moderator from "./components/Moderator";
 import Admin from "./components/Admin";
 
@@ -112,6 +113,14 @@ const App = () => {
               </li>
             )}
 
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/generator"} className="nav-link">
+                  Password generator
+                </Link>
+              </li>
+            )}
+
             {showModeratorBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
@@ -175,6 +184,7 @@ const App = () => {
           <Route path="/passwords" element={<AllPasswords />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/trash" element={<Trash />} />
+          <Route path="/generator" element={<Generator />} />
           <Route path="/mod" element={<Moderator />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
