@@ -2,22 +2,15 @@ import React, { useState } from "react";
 
 const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordEntry }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  // const [passwordVisibility, setPasswordVisibility] = useState({});
-
+  
   // Pagination
-  const entriesPerPage = 30; // Items per page. Adjust as needed
+  const entriesPerPage = 20;
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
   const currentEntries = passwordEntries.slice(indexOfFirstEntry, indexOfLastEntry);
   const totalPages = Math.ceil(passwordEntries.length / entriesPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // const togglePasswordVisibility = (id) => {
-  //   setPasswordVisibility((prevVisibility) => ({
-  //     ...prevVisibility,
-  //     [id]: !prevVisibility[id] || false,
-  //   }));
-  // };
 
   const copyToClipboard = async (text) => {
     try {
@@ -27,7 +20,6 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
       console.error('Unable to copy text to clipboard', err);
     }
   };
-
 
 
   if (!passwordEntries || passwordEntries.length === 0) {
@@ -43,11 +35,6 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
             <th style={{ width: '32%' }} scope="col">Title</th>
             <th style={{ width: '32%' }} scope="col">Website URL</th>
             <th style={{ width: '32%' }} scope="col">Username</th>
-            {/* <th scope="col"></th>
-          <th scope="col">Password</th>
-          <th scope="col"></th>
-          <th scope="col">Modified</th>
-          <th scope="col">Actions</th> */}
           </tr>
         </thead>
         {currentEntries.map((passwordEntry, index) => (
@@ -67,65 +54,6 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
               <td>{passwordEntry.title.length > 20 ? `${passwordEntry.title.substring(0, 20)}...` : passwordEntry.title}</td>
               <td>{passwordEntry.website.length > 35 ? `${passwordEntry.website.substring(0, 35)}...` : passwordEntry.website}</td>
               <td>{passwordEntry.username.length > 30 ? `${passwordEntry.username.substring(0, 30)}...` : passwordEntry.username}</td>
-
-              {/* <td>
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm mx-2"
-                onClick={() => copyToClipboard(passwordEntry.username)}
-              >
-                copy
-              </button>
-            </td>
-            <td style={{ verticalAlign: "middle" }}>
-              {passwordVisibility[passwordEntry.id] ? (
-                passwordEntry.encryptedPassword
-              ) : (
-                <span>********************</span>
-              )}
-            </td>
-            <td>
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm mx-2"
-                onClick={() => togglePasswordVisibility(passwordEntry.id)}
-              >
-                {passwordVisibility[passwordEntry.id] ? "hide" : "show"}
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm mx-2"
-                onClick={() => copyToClipboard(passwordEntry.encryptedPassword)}
-              >
-                copy
-              </button>
-            </td>
-
-            <td>{passwordEntry.updatedAt}</td>
-            <td>
-              <button
-                type="button"
-                className="btn btn-primary mx-2 btn-sm mx-2"
-                onClick={() => openWebsite(passwordEntry.website)}
-              >
-                Visit
-              </button>
-              <button
-                type="button"
-                className="btn btn-warning btn-sm mx-2"
-                onClick={() => editPasswordEntry(passwordEntry)}
-              >
-                Edit
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger mx-2 btn-sm mx-2"
-                onClick={() => deletePasswordEntry(passwordEntry.id)}
-              >
-                Delete
-              </button>
-
-            </td> */}
             </tr>
           </tbody>
         ))}
@@ -147,8 +75,6 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
           ))}
         </ul>
       </nav>
-
-
     </div>
   );
 };

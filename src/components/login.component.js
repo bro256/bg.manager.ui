@@ -76,7 +76,7 @@ const Login = (props) => {
 
       AuthService.login(state.username, state.password).then(
         () => {
-          props.router.navigate("/passwords");
+          props.router.navigate("/home");
           window.location.reload();
         },
         (error) => {

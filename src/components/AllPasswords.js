@@ -4,11 +4,12 @@ import AllPasswordsList from "./AllPasswordsList";
 import { encryptPassword, decryptPassword } from "../utils/cryptoUtils";
 import { calculatePasswordStrength, generateRandomPassword, getColorForPasswordStrength } from "../utils/passwordUtils";
 
-
-
 const AllPasswords = () => {
+  
+  //All password entries
   const [passwordEntries, setPasswordEntries] = useState([]);
 
+  //Password entry fields
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [username, setUsername] = useState("");
@@ -19,22 +20,26 @@ const AllPasswords = () => {
   const [passwordStrength, setPasswordStrength] = useState("None");
   const [inTrash, setInTrash] = useState(false);
 
+  //Other hooks
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
 
+  //Initial events on component rendering
   useEffect(() => {
     loadPasswordEntries();
     loadCategories();
   }, []);
 
 
+  //Trigered after password state changes
   useEffect(() => {
     updatePasswordStrength(password);
   }, [password]);
 
 
+  //Trigered after inTrash state changes
   useEffect(() => {
     if (id) {
       updatePasswordEntry();
@@ -50,6 +55,7 @@ const AllPasswords = () => {
       console.error("Error loading categories", error);
     }
   };
+
 
   const updatePasswordStrength = (password) => {
     const strength = calculatePasswordStrength(password);
@@ -108,7 +114,6 @@ const AllPasswords = () => {
       inTrash: inTrash,
       category: selectedCategory,
     };
-
     try {
       await UserService.savePasswordEntry(passwordEntryData);
       resetFormState();
@@ -181,6 +186,7 @@ const AllPasswords = () => {
     }
   };
 
+
   const loadPasswordEntries = async () => {
     try {
       const result = await UserService.getUserPasswordEntries();
@@ -219,10 +225,12 @@ const AllPasswords = () => {
     }
   };
 
+
   const toggleInTrashAndUpdate = () => {
     setInTrash((prevInTrash) => !prevInTrash);
     // Note: The useEffect hook will handle the updatePasswordEntry call
   };
+
 
   return (
     <div className="container mt-4">
@@ -325,7 +333,6 @@ const AllPasswords = () => {
               <label className="col-sm-4 col-form-label col-form-label-sm mx-2">In Favorites</label>
               <input type="checkbox" className="form-check-input form-check form-switch md-2" checked={inFavorites} onChange={() => setInFavorites(!inFavorites)} />
             </div>
-
 
             {/* Main buttons */}
             <div className="mb-3">
