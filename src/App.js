@@ -64,7 +64,7 @@ const App = () => {
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-        <Link to={"/"} className="navbar-brand">
+        <Link to={"/"} className="navbar-brand ms-3">
           Password Manager
         </Link>
 
