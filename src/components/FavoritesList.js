@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 const FavoritesList = ({ passwordEntries }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [passwordVisibility, setPasswordVisibility] = useState({});
@@ -21,10 +22,10 @@ const FavoritesList = ({ passwordEntries }) => {
     }));
   };
 
+
   const openWebsite = (url) => {
     window.open(url, '_blank');
   };
-
 
 
   const copyToClipboard = async (text) => {
@@ -40,6 +41,9 @@ const FavoritesList = ({ passwordEntries }) => {
   if (!passwordEntries || passwordEntries.length === 0) {
     return <p>No password entries found in.</p>;
   }
+
+
+
 
   return (
     <div className="col-md-12">
@@ -75,23 +79,11 @@ const FavoritesList = ({ passwordEntries }) => {
               <td>{passwordEntry.website.length > 35 ? `${passwordEntry.website.substring(0, 35)}...` : passwordEntry.website}</td>
 
               <td>
-                <button
-                  type="button"
-                  className="btn btn-primary mx-2 btn-sm mx-2"
-                  onClick={() => openWebsite(passwordEntry.website)}
-                >
-                  Visit
-                </button>
+                <button type="button" className="btn btn-primary mx-2 btn-sm mx-2" onClick={() => openWebsite(passwordEntry.website)}>Visit</button>
               </td>
               <td>{passwordEntry.username.length > 30 ? `${passwordEntry.username.substring(0, 30)}...` : passwordEntry.username}</td>
               <td>
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-sm mx-2"
-                  onClick={() => copyToClipboard(passwordEntry.username)}
-                >
-                  copy
-                </button>
+                <button type="button" className="btn btn-secondary btn-sm mx-2" onClick={() => copyToClipboard(passwordEntry.username)}>copy</button>
               </td>
               <td style={{ verticalAlign: "middle" }}>
                 {passwordVisibility[passwordEntry.id] ? (
@@ -103,24 +95,9 @@ const FavoritesList = ({ passwordEntries }) => {
                 )}
               </td>
               <td>
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-sm mx-2"
-                  onClick={() => copyToClipboard(passwordEntry.password)}
-                >
-                  copy
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-sm mx-2"
-                  onClick={() => togglePasswordVisibility(passwordEntry.id)}
-                >
-                  {passwordVisibility[passwordEntry.id] ? "hide" : "show"}
-                </button>
-
+                <button type="button" className="btn btn-secondary btn-sm mx-2" onClick={() => copyToClipboard(passwordEntry.password)}>copy</button>
+                <button type="button" className="btn btn-secondary btn-sm mx-2" onClick={() => togglePasswordVisibility(passwordEntry.id)}>{passwordVisibility[passwordEntry.id] ? "hide" : "show"}</button>
               </td>
-
-
             </tr>
           </tbody>
         ))}
@@ -142,7 +119,6 @@ const FavoritesList = ({ passwordEntries }) => {
           ))}
         </ul>
       </nav>
-
 
     </div>
   );

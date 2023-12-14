@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
+
 const TrashList = ({ passwordEntries, toggleInTrashAndUpdate, deletePasswordEntry }) => {
+
   const [currentPage, setCurrentPage] = useState(1);
 
   // Pagination

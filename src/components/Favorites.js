@@ -23,18 +23,18 @@ const Favorites = () => {
         const decryptedEntries = result.data
           .filter(entry => !entry.inTrash)
           .map(entry => {
-      
-          try {
-            return {
-              ...entry,
-              password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
-            };
-          } catch (error) {
-            console.error('Error decrypting entry:', entry, 'Error:', error);
-            return entry; // Return the original entry to avoid breaking the map function
-          }
 
-        });
+            try {
+              return {
+                ...entry,
+                password: decryptPassword(entry.encryptedPassword, entry.encryptionIv, sessionStorage.getItem('derivedKey')),
+              };
+            } catch (error) {
+              console.error('Error decrypting entry:', entry, 'Error:', error);
+              return entry;
+            }
+
+          });
         setPasswordEntries(decryptedEntries);
       } else {
         // No entries, set passwordEntries to an empty array
@@ -45,15 +45,16 @@ const Favorites = () => {
       alert("Error loading password entries. Please try again.");
     }
   };
-  
-  
+
+
+
   return (
     <div className="container mt-4">
       <div className="row">
 
         <div className="col-md-12">
           <FavoritesList
-              passwordEntries={passwordEntries}
+            passwordEntries={passwordEntries}
           />
         </div>
       </div>

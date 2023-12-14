@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 
-const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordEntry }) => {
+const PasswordEntryList = ({ passwordEntries, editPasswordEntry }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  
+
+
   // Pagination
   const entriesPerPage = 20;
   const indexOfLastEntry = currentPage * entriesPerPage;
@@ -26,6 +27,7 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
     return <p>No password entries found.</p>;
   }
 
+
   return (
     <div className="col-md-10">
       <table className="table table-sm table-hover mt-3" align="center">
@@ -37,7 +39,7 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
             <th style={{ width: '32%' }} scope="col">Username</th>
           </tr>
         </thead>
-        {currentEntries.map((passwordEntry, index) => (
+        {currentEntries.map((passwordEntry) => (
           <tbody key={passwordEntry.id} onClick={() => editPasswordEntry(passwordEntry)} style={{ cursor: 'pointer' }}>
             <tr>
               <td>
@@ -65,12 +67,7 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry, deletePasswordE
         <ul className="pagination">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <li key={page} className={`page-item ${currentPage === page ? "active" : ""}`}>
-              <button
-                onClick={() => setCurrentPage(page)}
-                className="page-link"
-              >
-                {page}
-              </button>
+              <button onClick={() => setCurrentPage(page)} className="page-link">{page}</button>
             </li>
           ))}
         </ul>

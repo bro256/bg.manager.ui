@@ -3,20 +3,17 @@ import UserService from "../services/user.service";
 import TrashList from "./TrashList";
 
 
-
-
 const Trash = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
-  const [inTrash, setInTrash] = useState(true);
 
 
   useEffect(() => {
     loadPasswordEntries();
   }, []);
 
+
   const toggleInTrashAndUpdate = async (id) => {
     try {
-      // Make a GET request to toggle the inTrash status
       await UserService.togglePasswordEntryInTrash(id);
       loadPasswordEntries();
 
@@ -26,13 +23,12 @@ const Trash = () => {
     }
   };
 
+
   const toggleAllInTrashAndUpdate = async () => {
     try {
       for (const passwordEntry of passwordEntries) {
         await UserService.togglePasswordEntryInTrash(passwordEntry.id);
       }
-      // Make a GET request to toggle the inTrash status
-
       loadPasswordEntries();
 
     } catch (error) {
@@ -73,6 +69,7 @@ const Trash = () => {
         // No entries, set passwordEntries to an empty array
         setPasswordEntries([]);
       }
+
     } catch (error) {
       console.error("Error loading password entries", error);
       alert("Error loading password entries. Please try again.");
@@ -84,7 +81,6 @@ const Trash = () => {
   return (
     <div className="container mt-4">
       <div className="row">
-
         <div className="col-md-12">
           <TrashList
             passwordEntries={passwordEntries}

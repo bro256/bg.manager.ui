@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
 
+
 const BoardModerator = () => {
   const [state, setState] = useState({
     content: ""
@@ -30,6 +31,7 @@ const BoardModerator = () => {
       }
     );
   }, []);
+
 
   return (
     <div className="container">

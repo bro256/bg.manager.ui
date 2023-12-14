@@ -3,17 +3,16 @@ import { Navigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 import { decryptPassword } from "../utils/cryptoUtils";
-
 import { CSVLink, CSVDownload } from "react-csv";
 
 const Profile = () => {
   const [passwordEntries, setPasswordEntries] = useState([]);
-
   const [state, setState] = useState({
     redirect: null,
     userReady: false,
     currentUser: { username: "" }
   });
+
 
   useEffect(() => {
     const currentUser = AuthService.getCurrentUser();
@@ -29,7 +28,6 @@ const Profile = () => {
   if (state.redirect) {
     return <Navigate to={state.redirect} />;
   }
-
 
 
   const loadPasswordEntries = async () => {
@@ -55,7 +53,6 @@ const Profile = () => {
           });
         setPasswordEntries(decryptedEntries);
       } else {
-        // No entries, set passwordEntries to an empty array
         setPasswordEntries([]);
       }
     } catch (error) {
@@ -75,7 +72,7 @@ const Profile = () => {
           <div className="card">
             <div className="card-body">
               <h3 className="card-title">User Account</h3>
-              
+
 
               <p><strong>User Name:</strong> {currentUser.username}</p>
               <p><strong>User Id:</strong> {currentUser.id}</p>
@@ -87,13 +84,8 @@ const Profile = () => {
                     <li key={index}>{role}</li>
                   ))}
               </ul>
-              {/* <p>
-                  <strong>Token:</strong>{" "}
-                  {currentUser.accessToken.substr(currentUser.accessToken)}
-                </p> */}
-              </div>
+            </div>
           </div>
-
 
           <div className="card">
             <div class="card-body">

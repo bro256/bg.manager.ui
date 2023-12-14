@@ -4,11 +4,10 @@ import AllPasswordsList from "./AllPasswordsList";
 import { encryptPassword, decryptPassword } from "../utils/cryptoUtils";
 import { calculatePasswordStrength, generateRandomPassword, getColorForPasswordStrength } from "../utils/passwordUtils";
 
+
 const AllPasswords = () => {
-  
   //All password entries
   const [passwordEntries, setPasswordEntries] = useState([]);
-
   //Password entry fields
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
@@ -19,7 +18,6 @@ const AllPasswords = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("None");
   const [inTrash, setInTrash] = useState(false);
-
   //Other hooks
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([]);
