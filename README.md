@@ -49,6 +49,28 @@ This password manager operates on the principle of zero-knowledge, ensuring that
 - **Initialization vector (IV):** 96 bits, random, different for every record
 - Implemented in accordance with official Crypto-js package
 
+## Installation
+
+Follow these steps to set up and run the project locally:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/bro256/bg.manager.ui.git
+
+2. Navigate to the project directory:
+   ```bash
+   cd your-repo
+
+3. Install dependencies:
+   ```bash
+   npm install
+
+4. Start the application:
+   ```bash
+    npm start
+
+5. Open your browser:
+Visit http://localhost:3000 to view the app.
+
 ## Contributing
 Thank you for considering contributing to our project! We welcome contributions from the community to make our project better. To contribute, please follow these guidelines:
 - Fork the repository and clone it locally.
