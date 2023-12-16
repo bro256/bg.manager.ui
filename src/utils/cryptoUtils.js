@@ -8,7 +8,7 @@ import CryptoJS from "crypto-js";
       const key = CryptoJS.enc.Hex.parse(derivedKey);
   
       // Generate a random IV
-      const iv = CryptoJS.lib.WordArray.random(16); // Increase IV length for GCM
+      const iv = CryptoJS.lib.WordArray.random(16);
   
       // Encrypt the password using AES-CBC
       const encrypted = CryptoJS.AES.encrypt(password, key, {
