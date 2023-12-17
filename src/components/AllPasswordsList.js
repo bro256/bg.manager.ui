@@ -54,8 +54,8 @@ const PasswordEntryList = ({ passwordEntries, editPasswordEntry }) => {
                 )}
               </td>
               <td>{passwordEntry.title.length > 20 ? `${passwordEntry.title.substring(0, 20)}...` : passwordEntry.title}</td>
-              <td>{passwordEntry.website.length > 35 ? `${passwordEntry.website.substring(0, 35)}...` : passwordEntry.website}</td>
-              <td>{passwordEntry.username.length > 30 ? `${passwordEntry.username.substring(0, 30)}...` : passwordEntry.username}</td>
+              <td>{passwordEntry.website.length > 20 ? `${passwordEntry.website.substring(0, 20)}...` : passwordEntry.website}</td>
+              <td>{passwordEntry.username.length > 20 ? `${passwordEntry.username.substring(0, 20)}...` : passwordEntry.username}</td>
             </tr>
           </tbody>
         ))}

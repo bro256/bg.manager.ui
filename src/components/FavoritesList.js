@@ -76,12 +76,12 @@ const FavoritesList = ({ passwordEntries }) => {
                 )}
               </td>
               <td>{passwordEntry.title.length > 20 ? `${passwordEntry.title.substring(0, 20)}...` : passwordEntry.title}</td>
-              <td>{passwordEntry.website.length > 35 ? `${passwordEntry.website.substring(0, 35)}...` : passwordEntry.website}</td>
+              <td>{passwordEntry.website.length > 20 ? `${passwordEntry.website.substring(0, 20)}...` : passwordEntry.website}</td>
 
               <td>
                 <button type="button" className="btn btn-primary mx-2 btn-sm mx-2" onClick={() => openWebsite(passwordEntry.website)}>Visit</button>
               </td>
-              <td>{passwordEntry.username.length > 30 ? `${passwordEntry.username.substring(0, 30)}...` : passwordEntry.username}</td>
+              <td>{passwordEntry.username.length > 20 ? `${passwordEntry.username.substring(0, 20)}...` : passwordEntry.username}</td>
               <td>
                 <button type="button" className="btn btn-secondary btn-sm mx-2" onClick={() => copyToClipboard(passwordEntry.username)}>copy</button>
               </td>
