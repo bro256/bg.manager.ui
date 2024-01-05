@@ -37,7 +37,6 @@ This password manager operates on the principle of zero-knowledge, ensuring that
 
 ### Authentication
 - **Password-hashing function:** bcrypt
-- 
 
 ### Key derivation function
 - **PBKDF2 (PBKDF2WithHmacSHA256)**
