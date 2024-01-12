@@ -8,6 +8,8 @@ Frontend application for Password manager API.
 - This project is React based Password manager frontend.
 - Backend application is made with Java Spring : [Link](https://github.com/bro256/bg.manager)
 
+![Password Manager](https://github.com/bro256/bg.manager.ui/src/static/img/Screenshot01.jpg)
+
 ## Zero-Knowledge Password Management
 
 This password manager operates on the principle of zero-knowledge, ensuring that all sensitive cryptographic operations take place exclusively on the user's side. This means that we, as the service provider, have no access to your plaintext passwords or any confidential information. Your data remains fully encrypted and private, and only you have the keys to unlock it.
