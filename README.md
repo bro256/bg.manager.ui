@@ -3,9 +3,7 @@
 ## About
 Project is still in progress!
 
-Frontend application for Password manager API.
-
-- This project is React based Password manager frontend.
+- This project is React based Password Manager frontend app for Password Manager API backend.
 - Backend application is made with Java Spring Boot : [Link](https://github.com/bro256/bg.manager)
 
 ![Password Manager](https://github.com/bro256/bg.manager.ui/blob/main/src/static/img/Screenshot01.png)              
@@ -99,4 +97,4 @@ git push origin feature/your-feature-name
 We appreciate your valuable contributions and look forward to working together to improve our project!
 
 ## Disclaimer
-This program is designed for educational purposes to illustrate the concept user side encryption and decryption. It may not be suitable for production use.
+This program is designed for educational purposes to illustrate the concept of user side encryption and decryption. It may not be suitable for production use.
